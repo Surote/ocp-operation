@@ -1,5 +1,7 @@
 # Cluster Health
 
+![Cluster Health](../../img/cluster-health-01.gif)
+
 A quick checklist of `oc` commands to assess an OpenShift cluster's overall health.
 
 ---

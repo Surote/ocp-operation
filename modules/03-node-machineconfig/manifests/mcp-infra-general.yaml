@@ -1,6 +1,9 @@
 apiVersion: machineconfiguration.openshift.io/v1
 kind: MachineConfigPool
 metadata:
+  labels:
+    # the label is used to identify the machine config pool for the infra-logmon role for kubeletconfig
+    machineconfiguration.openshift.io/role: infra-general
   name: infra-general
 spec:
   machineConfigSelector:

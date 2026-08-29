@@ -1,0 +1,12 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: KubeletConfig
+metadata:
+  name: infra-logmon-kubeletconfig
+spec:
+  kubeletConfig:
+    # ths number for test only. default is 250. host prefix /23 -> 510 max hard limit
+    maxPods: 290
+  autoSizingReserved: true
+  machineConfigPoolSelector:
+    matchLabels:
+      pools.operator.machineconfiguration.openshift.io/infra-logmon: ""

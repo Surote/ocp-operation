@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: byoip
-          image: quay.io/rh_ee_swongpai/byoip:v0.0.1
+          image: quay.io/rh_ee_swongpai/byoip:v0.0.2
           ports:
             - containerPort: 8080
 ---

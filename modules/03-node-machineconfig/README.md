@@ -27,7 +27,7 @@ oc label no/<node-name> node-role.kubernetes.io/infra=
 oc label no/<node-name> node-role.kubernetes.io/infra-logmon=
 ```
 
-![Label nodes](../../img/modules-03/label-node-infra.png)
+![Label nodes](../../img/module-03/label-node-infra.png)
 
 Verify the roles appear on the nodes:
 
@@ -35,7 +35,7 @@ Verify the roles appear on the nodes:
 oc get no
 ```
 
-![Label result](../../img/modules-03/label-node-infra-result.png)
+![Label result](../../img/module-03/label-node-infra-result.png)
 
 ---
 
@@ -46,7 +46,7 @@ oc apply -f manifests/mcp-infra-general.yaml
 oc apply -f manifests/mcp-infra-logmon.yaml
 ```
 
-![Apply MCP](../../img/modules-03/applied-mcp.png)
+![Apply MCP](../../img/module-03/applied-mcp.png)
 
 ---
 
@@ -60,7 +60,7 @@ oc get mcp
 
 Pools are healthy when `UPDATED` is `True`, `UPDATING` is `False`, and `DEGRADED` is `False`.
 
-![MCP result](../../img/modules-03/applied-mcp-result.png)
+![MCP result](../../img/module-03/applied-mcp-result.png)
 
 ---
 

@@ -24,3 +24,21 @@ Add `timecheck.swongpai.tt.local` `node's IP` `nodeport` in the byoip web
 browse the `https://timecheck.swongpai.tt.local` 
 
 ![7-02](../../img/module-07/7-02.png)
+
+
+## TEMP
+<TODO> Mention and test about default ingresscontroller also config for sharded -> need routeSelector matchExpression.
+```
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  name: default
+  namespace: openshift-ingress-operator
+spec:
+  routeSelector:
+    matchExpressions:
+      - key: type
+        operator: NotIn
+        values:
+          - sharded
+```

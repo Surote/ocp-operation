@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: byoip-deployment
+  namespace: byoip-application
+  labels:
+    app: byoip
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: byoip
+  template:
+    metadata:
+      labels:
+        app: byoip
+    spec:
+      containers:
+        - name: byoip
+          image: quay.io/rh_ee_swongpai/byoip:v0.0.1
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: byoip
+  labels:
+    app: byoip
+spec:
+  selector:
+    app: byoip
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: byoip
+  labels:
+    app: byoip
+spec:
+  to:
+    kind: Service
+    name: byoip
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

@@ -1,0 +1,12 @@
+apiVersion: monitoring.openshift.io/v1
+kind: AlertRelabelConfig
+metadata:
+  name: kube-node-notready-team
+  namespace: openshift-monitoring
+spec:
+  configs:
+    - sourceLabels: [alertname]
+      regex: "KubeNodeNotReady"
+      targetLabel: team
+      replacement: platform-infra
+      action: Replace

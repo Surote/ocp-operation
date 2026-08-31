@@ -1,39 +1,39 @@
-# Ingress
+# IngressController Sharding
 
-Create `sharding.yaml`
+This module demonstrates how to create a sharded IngressController using `NodePortService` and route traffic to it via a specific domain.
 
-Deploy `sample-application.yaml`
+---
 
-Deploy `byoip-cert-check-application.yaml`
+### Overview
 
-get node's IP the pod reside router sharding reside.
-```
-oc get pod -n openshift-ingress -o wide | grep sharded | awk '{print $7}' | xargs oc get no -o wide | awk '{print $6}'
-```
+By default, the `default` IngressController handles all routes. With sharding, you create additional IngressControllers that only serve routes matching a specific label selector. This is useful for separating traffic by domain, team, or environment.
 
-![7-00](../../img/module-07/7-00.png)
+---
 
-get the router's svc nodeport
-```
-oc get svc -n openshift-ingress router-nodeport-sharded -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}{"\n"}'
+### Step 1 — Create the Sharded IngressController
+
+```bash
+oc apply -f manifests/sharding.yaml
 ```
 
-![7-01](../../img/module-07/7-01.png)
+Key configuration in `sharding.yaml`:
 
-Add `timecheck.swongpai.tt.local` `node's IP` `nodeport` in the byoip web 
-browse the `https://timecheck.swongpai.tt.local` 
+| Parameter | Value | Description |
+|---|---|---|
+| `domain` | `swongpai.tt.local` | The domain this ingress serves |
+| `endpointPublishingStrategy.type` | `NodePortService` | Exposes the router via a NodePort on each node |
+| `routeSelector.matchLabels.type` | `sharded` | Only routes with label `type: sharded` use this ingress |
+| `replicas` | `1` | Number of router pods |
+| `logging.access.destination.type` | `Container` | Enables access logging to container stdout |
 
-![7-02](../../img/module-07/7-02.png)
+---
 
+### Step 2 — Update the Default IngressController
 
-## TEMP
-<TODO> Mention and test about default ingresscontroller also config for sharded -> need routeSelector matchExpression.
-```
-apiVersion: operator.openshift.io/v1
-kind: IngressController
-metadata:
-  name: default
-  namespace: openshift-ingress-operator
+To prevent the default IngressController from also handling sharded routes, add a `routeSelector` that excludes them:
+
+```bash
+oc patch ingresscontroller default -n openshift-ingress-operator --type merge -p '
 spec:
   routeSelector:
     matchExpressions:
@@ -41,4 +41,62 @@ spec:
         operator: NotIn
         values:
           - sharded
+'
 ```
+
+This ensures routes with `type: sharded` are only served by the sharded IngressController.
+
+---
+
+### Step 3 — Deploy the Sample Application
+
+```bash
+oc apply -f manifests/sample-application.yaml
+```
+
+This creates a namespace `sample-application` with:
+- A `timecheck` Deployment and Service (port 8000)
+- A Route with host `timecheck.swongpai.tt.local`, label `type: sharded`, and TLS edge termination
+
+---
+
+### Step 4 — Deploy the BYOIP Cert-Check Application (optional)
+
+```bash
+oc apply -f manifests/byoip-cert-check-application.yaml
+```
+
+A helper web app that lets you add DNS mapping rules and browse through the sharded ingress to verify TLS certificates and connectivity.
+
+---
+
+### Step 5 — Get the Node IP and NodePort
+
+Find the internal IP of the node where the sharded router pod is running:
+
+```bash
+oc get pod -n openshift-ingress -o wide | grep sharded | awk '{print $7}' | xargs oc get no -o wide | awk '{print $6}'
+```
+
+![7-00](../../img/module-07/7-00.png)
+
+Get the HTTPS NodePort of the sharded router service:
+
+```bash
+oc get svc -n openshift-ingress router-nodeport-sharded -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}{"\n"}'
+```
+
+![7-01](../../img/module-07/7-01.png)
+
+---
+
+### Step 6 — Test the Route
+
+In the BYOIP web app, add a mapping rule:
+
+- **Pattern**: `timecheck.swongpai.tt.local`
+- **Target**: `<node IP>:<nodeport>`
+
+Then browse to `https://timecheck.swongpai.tt.local` through the BYOIP proxy to verify the route, TLS certificate, and application response.
+
+![7-02](../../img/module-07/7-02.png)

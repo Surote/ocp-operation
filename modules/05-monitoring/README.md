@@ -17,7 +17,7 @@ This ConfigMap (`cluster-monitoring-config` in `openshift-monitoring`) configure
 | Component | Node Selector | Storage | Other |
 |---|---|---|---|
 | `alertmanagerMain` | `infra` | `5Gi` (`standard-csi`) | — |
-| `prometheusK8s` | `infra` | `200Gi` (`standard-csi`) | `retention: 15d` |
+| `prometheusK8s` | `infra` | `100Gi` (`standard-csi`) | `retention: 15d` |
 | `prometheusOperator` | `infra` | — | — |
 | `monitoringPlugin` | `infra` | — | — |
 | `metricsServer` | `infra` | — | — |
@@ -54,15 +54,20 @@ oc patch pvc prometheus-data-prometheus-k8s-0 -n openshift-monitoring --type mer
 spec:
   resources:
     requests:
-      storage: 400Gi
+      storage: 200Gi
 '
 ```
-
+![Prometheus PVC expand](../../img/module-05/prometheus-pvc-expand.png)
 Verify:
 
 ```bash
-oc get pvc -n openshift-monitoring
+oc get pvc,pod -n openshift-monitoring
 ```
+
+
+After applying the monitoring ConfigMap, all monitoring pods and PVCs should be running on infra nodes with the configured storage:
+
+![Monitoring PVCs, pods, and Prometheus storage](../../img/module-05/monitoring-pvc-pods-storage.png)
 
 ---
 
@@ -103,4 +108,6 @@ spec:
 
 Once applied, the `KubeNodeNotReady` alert will carry the `team = platform-infra` label, which can be used in Alertmanager to route notifications to the correct receiver.
 
-![Alert relabel result](../../img/module-05/05-mail-relabel.png)
+> **Note:** `AlertRelabelConfig` only modifies labels on the Alertmanager side. The relabeled labels will appear in Alertmanager and in notifications (e.g. email, webhook), but they will **not** be visible in the OpenShift web console Observe > Alerting UI, which reads alerts directly from Prometheus before relabeling is applied.
+
+![Alert relabel email result](../../img/module-05/alert-relabel-email.png)

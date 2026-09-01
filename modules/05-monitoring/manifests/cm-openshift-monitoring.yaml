@@ -16,10 +16,10 @@ data:
         metadata:
           name: alertmanager-main-data
         spec:
-          storageClassName: standard-csi
+          storageClassName: ocs-external-storagecluster-ceph-rbd
           resources:
             requests:
-              storage: 5Gi
+              storage: 1Gi
     prometheusK8s:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
@@ -32,10 +32,10 @@ data:
         metadata:
           name: prometheus-data
         spec:
-          storageClassName: standard-csi
+          storageClassName: ocs-external-storagecluster-ceph-rbd
           resources:
             requests:
-              storage: 200Gi
+              storage: 100Gi
     prometheusOperator:
       nodeSelector:
         node-role.kubernetes.io/infra: ""

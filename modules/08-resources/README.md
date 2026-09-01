@@ -12,20 +12,24 @@ A ResourceQuota sets hard caps on the total amount of resources a namespace can 
 Create a quota:
 
 ```bash
-oc apply -f - <<EOF
+oc apply -f manifests/00-resource-quota-limitrange.yaml
+```
+
+The ResourceQuota in this module:
+
+```yaml
 apiVersion: v1
 kind: ResourceQuota
 metadata:
   name: example-quota
-  namespace: <namespace>
+  namespace: 08-module
 spec:
   hard:
-    requests.cpu: "4"
-    requests.memory: 8Gi
-    limits.cpu: "8"
-    limits.memory: 16Gi
-    pods: "20"
-EOF
+    requests.cpu: "1"
+    requests.memory: 2Gi
+    limits.cpu: "4"
+    limits.memory: 8Gi
+    pods: "10"
 ```
 
 Parameters under `spec.hard`:
@@ -54,11 +58,11 @@ Additional parameters you can set:
 Check current usage against the quota:
 
 ```bash
-oc describe quota example-quota -n <namespace>
+oc describe quota example-quota -n 08-module
 ```
 
 ```bash
-oc get resourcequota -n <namespace>
+oc get resourcequota -n 08-module
 ```
 
 ---
@@ -69,13 +73,14 @@ A LimitRange sets default resource requests/limits that are automatically applie
 
 Create a limit range:
 
-```bash
-oc apply -f - <<EOF
+The LimitRange in this module (included in the same manifest):
+
+```yaml
 apiVersion: v1
 kind: LimitRange
 metadata:
   name: example-limits
-  namespace: <namespace>
+  namespace: 08-module
 spec:
   limits:
   - type: Container
@@ -89,9 +94,8 @@ spec:
       cpu: 50m
       memory: 64Mi
     max:
-      cpu: "2"
-      memory: 2Gi
-EOF
+      cpu: "4"
+      memory: 8Gi
 ```
 
 Parameters under `spec.limits[]`:
@@ -117,11 +121,11 @@ How defaults get applied:
 Check the active limit range:
 
 ```bash
-oc describe limitrange example-limits -n <namespace>
+oc describe limitrange example-limits -n 08-module
 ```
 
 ```bash
-oc get limitrange -n <namespace>
+oc get limitrange -n 08-module
 ```
 
 ---

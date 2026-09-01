@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timecheck-deployment-quota
+  namespace: 08-module
+  labels:
+    app: timecheck-quota
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timecheck-quota
+  template:
+    metadata:
+      labels:
+        app: timecheck-quota
+    spec:
+      containers:
+        - name: timecheck-fastapi-quota
+          image: quay.io/rh_ee_swongpai/fast-localtime-check:lw-217d4d6d9b0e7886ae03b053db2c4f4cd8b104ec
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 3
+              memory: 100Mi
+            limits:
+              cpu: 4
+              memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timecheck-service-quota
+  namespace: 08-module
+  labels:
+    app: timecheck-quota
+spec:
+  selector:
+    app: timecheck-quota
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: timecheck-route-quota
+  namespace: 08-module
+  labels:
+    app: timecheck
+    type: sharded
+spec:
+  to:
+    kind: Service
+    name: timecheck-service-quota
+  port:
+    targetPort: 8000
+  tls:
+    termination: edge

@@ -2,6 +2,8 @@
 
 A collection of modules for OpenShift Container Platform day-2 operations — covering cluster health, node placement, monitoring, logging, GitOps, ingress, and resource management.
 
+> **Disclaimer:** This repository is for **learning and demonstration purposes only**. All values and parameters (e.g. resource quotas, storage sizes, retention periods, replica counts, scan schedules) are examples and are **not intended for production use**. Review and adjust them according to your environment and organizational requirements before applying to a production cluster.
+
 ---
 
 ### Modules

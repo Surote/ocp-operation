@@ -1,0 +1,19 @@
+apiVersion: monitoring.openshift.io/v1
+kind: AlertingRule
+metadata:
+  name: node-memory-usage
+  namespace: openshift-monitoring
+spec:
+  groups:
+  - name: node-memory
+    rules:
+    - alert: NodeMemoryUsageHigh
+      expr: |
+        (1 - (node_memory_MemAvailable_bytes{job="node-exporter"}
+              / node_memory_MemTotal_bytes{job="node-exporter"})) * 100 > 60
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Node {{ $labels.instance }} memory usage is above 60%"
+        description: "Memory usage on {{ $labels.instance }} has been {{ $value | printf \"%.1f\" }}% for more than 5 minutes."

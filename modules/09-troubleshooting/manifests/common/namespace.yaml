@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/learner: lab

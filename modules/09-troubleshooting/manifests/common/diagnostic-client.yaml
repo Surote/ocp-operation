@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diagnostic-client-common
+  namespace: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/case: common
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: diagnostic-client-common
+  template:
+    metadata:
+      labels:
+        app: diagnostic-client-common
+        role: diagnostic-client
+        training.redhat.com/case: common
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: client
+          image: registry.access.redhat.com/ubi9/python-312:latest
+          command:
+            - sleep
+            - infinity
+          resources:
+            requests:
+              cpu: 10m
+              memory: 24Mi
+            limits:
+              cpu: 100m
+              memory: 96Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL

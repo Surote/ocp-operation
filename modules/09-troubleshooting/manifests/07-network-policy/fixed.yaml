@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lab-deny-app-07
+  namespace: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/case: '07'
+spec:
+  podSelector:
+    matchLabels:
+      role: server
+      training.redhat.com/case: '07'
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lab-allow-client-07
+  namespace: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/case: '07'
+spec:
+  podSelector:
+    matchLabels:
+      role: server
+      training.redhat.com/case: '07'
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: diagnostic-client
+              training.redhat.com/case: '07'
+      ports:
+        - protocol: TCP
+          port: 8080

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-02
+  namespace: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/case: '02'
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: troubleshooting-app-02
+  template:
+    metadata:
+      labels:
+        app: troubleshooting-app-02
+        role: server
+        training.redhat.com/case: '02'
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: quay.io/rh_ee_swongpai/fast-localtime-check:lw-d52838e1ff20e6ef1f92bc2422f98a9f93e7438b
+          imagePullPolicy: IfNotPresent
+          command:
+            - uvicorn
+            - app:app
+            - --host
+            - 0.0.0.0
+            - --port
+            - '8080'
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 3
+          resources:
+            requests:
+              cpu: 20m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL

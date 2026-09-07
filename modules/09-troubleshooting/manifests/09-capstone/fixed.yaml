@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-09
+  namespace: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/case: '09'
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: troubleshooting-app-09
+  template:
+    metadata:
+      labels:
+        app: troubleshooting-app-09
+        role: server
+        training.redhat.com/case: '09'
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: quay.io/rh_ee_swongpai/fast-localtime-check:lw-d52838e1ff20e6ef1f92bc2422f98a9f93e7438b
+          imagePullPolicy: IfNotPresent
+          command:
+            - uvicorn
+            - app:app
+            - --host
+            - 0.0.0.0
+            - --port
+            - '8080'
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 3
+          resources:
+            requests:
+              cpu: 20m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-09
+  namespace: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/case: '09'
+spec:
+  selector:
+    app: troubleshooting-app-09
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lab-deny-app-09
+  namespace: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/case: '09'
+spec:
+  podSelector:
+    matchLabels:
+      role: server
+      training.redhat.com/case: '09'
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lab-allow-client-09
+  namespace: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/case: '09'
+spec:
+  podSelector:
+    matchLabels:
+      role: server
+      training.redhat.com/case: '09'
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: diagnostic-client
+              training.redhat.com/case: '09'
+      ports:
+        - protocol: TCP
+          port: 8080

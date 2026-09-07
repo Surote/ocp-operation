@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: app-common
+  namespace: 09-ts-lab
+  labels:
+    training.redhat.com/lab: 09-troubleshooting
+    training.redhat.com/case: common
+spec:
+  to:
+    kind: Service
+    name: app-common
+  port:
+    targetPort: http

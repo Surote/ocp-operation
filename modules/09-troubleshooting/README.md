@@ -1,6 +1,6 @@
 # OpenShift Day-2 Troubleshooting Lab
 
-This six-hour, symptom-first lab teaches OpenShift administrators to diagnose image, process, readiness, scheduling, quota, Service, NetworkPolicy, storage, and configuration failures. A capstone combines three independent faults. Every case lives in the single `09-ts-lab` namespace and all cases can be applied at once. Faults are namespace-scoped, apart from the `lab-case-05` PriorityClass that scopes the exercise 05 quota; cluster triage is read-only.
+This six-hour, symptom-first lab teaches OpenShift administrators to diagnose image, process, readiness, scheduling, quota, Service, NetworkPolicy, storage, and configuration failures. A capstone combines three independent faults. Every case lives in the single `09-ts-lab` namespace and all cases can be applied at once. Every fault is namespace-scoped, so no exercise needs cluster-admin; cluster triage is read-only.
 
 The package contains only concrete YAML and Markdown. Each `manifests/<case>/setup.yaml` creates the shared `09-ts-lab` namespace if it is absent, plus that case's complete healthy state; `broken.yaml` injects the fault; `fixed.yaml` applies the repair. Those two hold only the objects that actually change, so each one names the fault and its repair plainly and must be applied on top of `setup.yaml`, never on their own. Do not apply the entire `manifests/` tree because lifecycle files conflict.
 
@@ -29,4 +29,4 @@ oc -n 09-ts-lab get deployment,service,configmap,networkpolicy,resourcequota,pvc
 oc -n 09-ts-lab delete deployment,service,configmap,networkpolicy,resourcequota,pvc -l training.redhat.com/case=01 --wait=true --timeout=180s
 ```
 
-Deletion is irreversible. Exercise 05 also creates the cluster-scoped `lab-case-05` PriorityClass; remove it with `oc delete priorityclass lab-case-05` once no learner needs exercise 05. Exercise 08 claims and data are disposable; never use an existing claim or shared data.
+Deletion is irreversible. Exercise 08 claims and data are disposable; never use an existing claim or shared data.

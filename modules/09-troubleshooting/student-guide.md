@@ -112,7 +112,7 @@ oc -n 09-ts-lab delete deployment,service,configmap,networkpolicy,resourcequota,
 
 Success: one desired/available Pod within quota and no current replica deficit.
 
-The quota counts only Pods carrying the `lab-case-05` PriorityClass, so it caps this case alone rather than the shared namespace. Once no learner needs this exercise, the instructor removes the cluster-scoped class with `oc delete priorityclass lab-case-05`.
+The quota carries `scopes: [BestEffort]`, so it counts only Pods that declare no CPU or memory requests. This case's Pods are the only BestEffort ones in the lab, so the one-Pod cap applies to this exercise alone rather than to the shared namespace.
 
 ## 06 — Healthy Pods, broken Service (30 minutes)
 

@@ -45,16 +45,8 @@ spec:
               port: http
             initialDelaySeconds: 2
             periodSeconds: 3
-          resources:
-            requests:
-              cpu: 20m
-              memory: 32Mi
-            limits:
-              cpu: 200m
-              memory: 128Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
-      priorityClassName: lab-case-05

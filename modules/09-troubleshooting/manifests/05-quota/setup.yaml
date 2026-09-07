@@ -6,17 +6,6 @@ metadata:
     training.redhat.com/lab: 09-troubleshooting
     training.redhat.com/learner: lab
 ---
-apiVersion: scheduling.k8s.io/v1
-kind: PriorityClass
-metadata:
-  name: lab-case-05
-  labels:
-    training.redhat.com/lab: 09-troubleshooting
-    training.redhat.com/case: '05'
-value: 0
-globalDefault: false
-description: Scopes the case 05 ResourceQuota to case 05 pods only.
----
 apiVersion: v1
 kind: ResourceQuota
 metadata:
@@ -28,12 +17,8 @@ metadata:
 spec:
   hard:
     pods: '1'
-  scopeSelector:
-    matchExpressions:
-      - scopeName: PriorityClass
-        operator: In
-        values:
-          - lab-case-05
+  scopes:
+    - BestEffort
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -68,11 +53,11 @@ spec:
           imagePullPolicy: IfNotPresent
           command:
             - uvicorn
-            - "app:app"
+            - app:app
             - --host
             - 0.0.0.0
             - --port
-            - "8080"
+            - '8080'
           ports:
             - name: http
               containerPort: 8080
@@ -82,19 +67,11 @@ spec:
               port: http
             initialDelaySeconds: 2
             periodSeconds: 3
-          resources:
-            requests:
-              cpu: 20m
-              memory: 32Mi
-            limits:
-              cpu: 200m
-              memory: 128Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
-      priorityClassName: lab-case-05
 ---
 apiVersion: v1
 kind: Service

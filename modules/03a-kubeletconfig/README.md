@@ -1,0 +1,58 @@
+# KubeletConfig
+
+This module demonstrates how to customise kubelet settings per MachineConfigPool using the **KubeletConfig** custom resource in OpenShift.
+
+---
+
+### Overview
+
+A **KubeletConfig** resource lets you override default kubelet parameters (e.g. `maxPods`, system-reserved resources) for a specific set of nodes selected through a MachineConfigPool label. In this module we apply two KubeletConfig objects — one for each infra pool created in module 03:
+
+- `infra-general-kubeletconfig` — targets `infra-general` nodes, sets `maxPods: 280`
+- `infra-logmon-kubeletconfig` — targets `infra-logmon` nodes, sets `maxPods: 290`
+
+Both configs enable `autoSizingReserved: true`, which lets the kubelet automatically calculate system-reserved CPU and memory based on the node's capacity.
+
+> **Note:** The default `maxPods` is **250**. The hard upper limit depends on the host prefix — a `/23` CIDR allows up to **510** pods per node. The values here are intentionally above the default for testing purposes.
+
+---
+
+### Prerequisites
+
+- Module 03 (Node MachineConfig) must be completed — the `infra-general` and `infra-logmon` MachineConfigPools must already exist.
+
+---
+
+### Step 1 — Apply the KubeletConfig Manifests
+
+```bash
+oc apply -f manifests/infra-general.yaml
+oc apply -f manifests/infra-logmon.yaml
+```
+
+---
+
+### Step 2 — Verify the Rollout
+
+Applying a KubeletConfig triggers a rolling update of the targeted MachineConfigPool. Monitor progress with:
+
+```bash
+oc get mcp -w
+```
+
+Wait until both `infra-general` and `infra-logmon` pools show `UPDATED: True`, `UPDATING: False`, and `DEGRADED: False`.
+
+You can also inspect the rendered kubelet config on a specific node:
+
+```bash
+oc debug node/<node-name> -- chroot /host cat /etc/kubernetes/kubelet.conf | grep maxPods
+```
+
+---
+
+### Manifests Reference
+
+| File | KubeletConfig Name | Target MCP Label | maxPods | autoSizingReserved |
+|---|---|---|---|---|
+| `infra-general.yaml` | `infra-general-kubeletconfig` | `infra-general` | 280 | true |
+| `infra-logmon.yaml` | `infra-logmon-kubeletconfig` | `infra-logmon` | 290 | true |

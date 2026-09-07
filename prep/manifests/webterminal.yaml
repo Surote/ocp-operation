@@ -11,9 +11,7 @@ kind: OperatorGroup
 metadata:
   name: web-terminal
   namespace: openshift-terminal
-spec:
-  targetNamespaces:
-  - openshift-terminal
+spec: {}
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription

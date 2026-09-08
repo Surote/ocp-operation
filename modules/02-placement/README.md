@@ -72,7 +72,7 @@ oc label node <node-name> node-role.kubernetes.io/worker-
 ### Add role `infra-generic` and role `infra-observe` 
 
 ```bash
-oc label node <node-name> node-role.kubernetes.io/infra-generic=
+oc label node <node-name> node-role.kubernetes.io/infra-general=
 oc label node <node-name> node-role.kubernetes.io/infra-observe=
 ```
 ![node add label complete](../../img/module-02/node-label-infra-complete.png)

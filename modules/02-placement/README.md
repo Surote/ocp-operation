@@ -14,6 +14,8 @@ Add a label to a node:
 oc label node <node-name> node-role.kubernetes.io/infra=""
 ```
 
+![node label infra](../../img/module-02/node-label-infra.png)
+
 Add a label to multiple nodes by selector:
 
 ```bash
@@ -26,12 +28,33 @@ Check node labels:
 oc get nodes --show-labels
 ```
 
+EXAMPLE output
+```bash
+NAME                            STATUS   ROLES                         AGE     VERSION   LABELS
+control-plane-cluster-w6hvx-1   Ready    control-plane,master,worker   7d      v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=control-plane-cluster-w6hvx-1,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=,node-role.kubernetes.io/master=,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
+control-plane-cluster-w6hvx-2   Ready    control-plane,master,worker   7d      v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=control-plane-cluster-w6hvx-2,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=,node-role.kubernetes.io/master=,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
+control-plane-cluster-w6hvx-3   Ready    control-plane,master,worker   7d      v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=control-plane-cluster-w6hvx-3,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=,node-role.kubernetes.io/master=,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
+worker-cluster-w6hvx-1          Ready    worker                        6d23h   v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=worker-cluster-w6hvx-1,kubernetes.io/os=linux,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
+worker-cluster-w6hvx-2          Ready    worker                        6d23h   v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=worker-cluster-w6hvx-2,kubernetes.io/os=linux,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
+worker-cluster-w6hvx-3          Ready    infra,worker                  6d23h   v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=worker-cluster-w6hvx-3,kubernetes.io/os=linux,node-role.kubernetes.io/infra=,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
+worker-cluster-w6hvx-4          Ready    infra,worker                  6d23h   v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=worker-cluster-w6hvx-4,kubernetes.io/os=linux,node-role.kubernetes.io/infra=,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
+worker-cluster-w6hvx-5          Ready    infra,worker                  6d23h   v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=worker-cluster-w6hvx-5,kubernetes.io/os=linux,node-role.kubernetes.io/infra=,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
+worker-cluster-w6hvx-6          Ready    infra,worker                  6d23h   v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=worker-cluster-w6hvx-6,kubernetes.io/os=linux,node-role.kubernetes.io/infra=,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
+```
+
+Add wrong label
+```bash
+oc label node <node-name> 
+```
+![node wrong label](../../img/module-02/node-wrong-label.png)
+
 Remove a label (trailing `-`):
 
 ```bash
 oc label node <node-name> <label-key>-
 ```
 
+![node remove wrong label](../../img/module-02/node-remove-wrong-label.png)
 ---
 
 ### Taints

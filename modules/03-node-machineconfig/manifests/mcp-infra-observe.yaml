@@ -3,14 +3,14 @@ kind: MachineConfigPool
 metadata:
   labels:
     # the label is used to identify the machine config pool for the infra-logmon role for kubeletconfig
-    machineconfiguration.openshift.io/role: infra-logmon
-  name: infra-logmon
+    machineconfiguration.openshift.io/role: infra-observe
+  name: infra-observe
 spec:
   machineConfigSelector:
     matchExpressions:
-      - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infra-logmon]}
+      - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infra-observe]}
   maxUnavailable: null
   nodeSelector:
     matchLabels:
-      node-role.kubernetes.io/infra-logmon: ""
+      node-role.kubernetes.io/infra-observe: ""
   paused: false

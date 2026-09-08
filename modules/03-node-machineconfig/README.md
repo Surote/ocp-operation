@@ -7,6 +7,11 @@ This module demonstrates how to work with MachineConfigPool (MCP) to manage node
 ## Overview
 
 ![MCP overview](../../img/module-03/mcp-overview.png)
+
+MCP (MachineConfigPool) ใช้สำหรับแบ่งกลุ่มเครื่องในคลัสเตอร์ เพื่อกำหนดค่า configuration ระดับ OS เช่น NTP, multipath, kernel arguments หรือการเขียนไฟล์ต่าง ๆ ลงบนเครื่อง ทำให้สามารถกำหนดค่าให้แต่ละกลุ่มแตกต่างกันได้ตามลักษณะงาน เช่น กลุ่ม worker ตั้ง max pods = 300 ขณะที่กลุ่ม infra-general ตั้ง max pods = 250
+
+อย่างไรก็ตาม MCP ทำหน้าที่กำหนดว่า "เครื่องจะถูกตั้งค่าอย่างไร" เท่านั้น ไม่ได้กำหนดว่า workload ใดจะไปรันบนเครื่องไหน ซึ่งส่วนนั้นควบคุมด้วย label, taint/toleration และ nodeSelector ของ workload แทน
+
 A **MachineConfigPool** groups nodes by label so that MachineConfig resources (NTP, file writes, kernel arguments, etc.) can target specific sets of nodes. In this example we create two custom pools for infra workloads:
 
 - `infra-general` — general-purpose infra nodes (e.g. ingress, registry)
@@ -56,3 +61,5 @@ After applying, the infra nodes are picked up by their respective pools based on
 | `mcp-infra-observe.yaml` | `infra-observe` | `node-role.kubernetes.io/infra-observe` |
 
 Both pools use `machineConfigSelector` matching roles `[worker, <pool-role>]`, meaning they inherit all MachineConfigs targeted at the `worker` role while also accepting pool-specific MachineConfigs (e.g. `infra-general` or `infra-observe`).
+
+![MCP completed](../../img/module-03/mcp-completed.jpg)

@@ -23,32 +23,27 @@ oc get mcp
 
 ![Existing MCP](../../img/module-03/existing-mcp.png)
 
-Notice the `worker` pool shows **MACHINECOUNT 2** instead of 4. This is because in the previous module we removed the `node-role.kubernetes.io/worker` label from the infra nodes. Since the `worker` MCP selects nodes by that label, those infra nodes are no longer counted in the `worker` pool.
+Notice the `worker` pool shows **MACHINECOUNT 2** instead of 6. This is because in the previous module we removed the `node-role.kubernetes.io/worker` label from the infra nodes. Since the `worker` MCP selects nodes by that label, those infra nodes are no longer counted in the `worker` pool.
 
 ---
 
-## Step 1 — Apply the MachineConfigPool Manifests
+## Step 1 — Apply and Verify the MachineConfigPool Manifests
+
+Each MCP manifest defines two key selectors:
+
+- **`nodeSelector`** — determines which nodes belong to this pool. For example, `infra-general` selects nodes with the label `node-role.kubernetes.io/infra-general`.
+- **`machineConfigSelector`** — determines which MachineConfig resources are applied to nodes in this pool. Both pools use a `matchExpressions` with `In [worker, <pool-role>]`, so they inherit all MachineConfigs targeted at the `worker` role in addition to their own.
 
 ```bash
 oc apply -f manifests/mcp-infra-general.yaml
 oc apply -f manifests/mcp-infra-observe.yaml
 ```
 
-![Apply MCP](../../img/module-03/applied-mcp.png)
+![Apply MCP](../../img/module-03/applying-mcp.png)
 
----
+After applying, the infra nodes are picked up by their respective pools based on the labels we assigned in module 02. You can verify with `oc get no` to see the roles and `oc get mcp` to confirm each pool has the correct machine count.
 
-## Step 2 — Verify
-
-Check that the new pools are created and all machines are updated:
-
-```bash
-oc get mcp
-```
-
-Pools are healthy when `UPDATED` is `True`, `UPDATING` is `False`, and `DEGRADED` is `False`.
-
-![MCP result](../../img/module-03/applied-mcp-result.png)
+![MCP placed](../../img/module-03/mcp-placed.png)
 
 ---
 
@@ -57,6 +52,6 @@ Pools are healthy when `UPDATED` is `True`, `UPDATING` is `False`, and `DEGRADED
 | File | MCP Name | Node Selector Label |
 |---|---|---|
 | `mcp-infra-general.yaml` | `infra-general` | `node-role.kubernetes.io/infra-general` |
-| `mcp-infra-logmon.yaml` | `infra-logmon` | `node-role.kubernetes.io/infra-logmon` |
+| `mcp-infra-observe.yaml` | `infra-observe` | `node-role.kubernetes.io/infra-observe` |
 
-Both pools use `machineConfigSelector` matching roles `[worker, infra]`, meaning they inherit all MachineConfigs targeted at `worker` or `infra` roles.
+Both pools use `machineConfigSelector` matching roles `[worker, <pool-role>]`, meaning they inherit all MachineConfigs targeted at the `worker` role while also accepting pool-specific MachineConfigs (e.g. `infra-general` or `infra-observe`).

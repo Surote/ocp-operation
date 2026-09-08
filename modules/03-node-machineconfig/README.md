@@ -13,33 +13,7 @@ A **MachineConfigPool** groups nodes by label so that MachineConfig resources (N
 
 ---
 
-## Step 1 — Label the Nodes
-
-Assign the appropriate role labels to worker nodes so each MCP can select them.
-
-```bash
-# infra-general node
-oc label no/<node-name> node-role.kubernetes.io/infra=
-oc label no/<node-name> node-role.kubernetes.io/infra-general=
-
-# infra-logmon node
-oc label no/<node-name> node-role.kubernetes.io/infra=
-oc label no/<node-name> node-role.kubernetes.io/infra-logmon=
-```
-
-![Label nodes](../../img/module-03/label-node-infra.png)
-
-Verify the roles appear on the nodes:
-
-```bash
-oc get no
-```
-
-![Label result](../../img/module-03/label-node-infra-result.png)
-
----
-
-## Step 2 — Apply the MachineConfigPool Manifests
+## Step 1 — Apply the MachineConfigPool Manifests
 
 ```bash
 oc apply -f manifests/mcp-infra-general.yaml
@@ -50,7 +24,7 @@ oc apply -f manifests/mcp-infra-logmon.yaml
 
 ---
 
-## Step 3 — Verify
+## Step 2 — Verify
 
 Check that the new pools are created and all machines are updated:
 

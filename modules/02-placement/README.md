@@ -233,3 +233,9 @@ oc get pods -n 02-module -o wide
 ![Application pods on infra nodes](../../img/module-02/application-deployed.png)
 
 > **Note:** There are only 2 nodes with the `infra-general` label, so with 3 replicas, one node will have 2 pods scheduled on it.
+
+Check the application able to access
+
+![Application route](../../img/module-02/application-check-route.png)
+
+![Application example](../../img/module-02/application-example.png)

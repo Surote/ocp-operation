@@ -4,11 +4,11 @@ This module covers node labeling, tainting, and pod placement — how to control
 
 ---
 
-### Node Labels
+## Node Labels
 
 Labels are key-value pairs attached to nodes. They are used by `nodeSelector` and node affinity rules to schedule pods onto specific nodes.
 
-Add a label to a node:
+### Add a label to a node:
 
 ```bash
 oc label node <node-name> node-role.kubernetes.io/infra=""
@@ -16,13 +16,13 @@ oc label node <node-name> node-role.kubernetes.io/infra=""
 
 ![node label infra](../../img/module-02/node-label-infra.png)
 
-Add a label to multiple nodes by selector:
+### Add a label to multiple nodes by selector:
 
 ```bash
 oc label node -l <existing-label> <new-label-key>=<new-label-value>
 ```
 
-Check node labels:
+### Check node labels:
 
 ```bash
 oc get nodes --show-labels
@@ -42,22 +42,35 @@ worker-cluster-w6hvx-5          Ready    infra,worker                  6d23h   v
 worker-cluster-w6hvx-6          Ready    infra,worker                  6d23h   v1.35.6   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=worker-cluster-w6hvx-6,kubernetes.io/os=linux,node-role.kubernetes.io/infra=,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhel
 ```
 
-Add wrong label
+### Add wrong label
 ```bash
 oc label node <node-name> 
 ```
 ![node wrong label](../../img/module-02/node-wrong-label.png)
 
-Remove a label (trailing `-`):
+### Remove a label (trailing `-`):
 
 ```bash
 oc label node <node-name> <label-key>-
 ```
 
 ![node remove wrong label](../../img/module-02/node-remove-wrong-label.png)
+
 ---
 
-### Taints
+### Remove `worker` label from `infra` nodes
+
+Once a node is designated as infra, remove the `worker` role so that user workloads are not scheduled on it:
+
+```bash
+oc label node <node-name> node-role.kubernetes.io/worker-
+```
+
+![node remove label worker](../../img/module-02/node-remove-label-worker.png)
+
+---
+
+## Taints
 
 Taints prevent pods from being scheduled on a node unless the pod has a matching toleration. This is commonly used to reserve infra nodes for platform components only.
 
@@ -104,7 +117,7 @@ Taint effects:
 
 ---
 
-### Tolerations
+## Tolerations
 
 For a pod to be scheduled on a tainted node, it must declare a matching toleration. Example for the infra taint above:
 
@@ -137,7 +150,7 @@ Omitting `effect` with `Exists` tolerates all effects for that key. Omitting bot
 
 ---
 
-### Node Selector
+## Node Selector
 
 A `nodeSelector` ensures a pod only runs on nodes with the specified labels:
 
@@ -149,7 +162,7 @@ spec:
 
 ---
 
-### Putting It Together
+## Putting It Together
 
 A typical pattern for placing workloads on infra nodes uses both `nodeSelector` and `tolerations` together:
 
@@ -170,7 +183,7 @@ This ensures the pod:
 
 ---
 
-### Deploy Sample Application
+## Deploy Sample Application
 
 Apply the sample application that demonstrates placement on infra nodes:
 

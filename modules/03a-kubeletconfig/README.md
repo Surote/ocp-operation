@@ -4,7 +4,7 @@ This module demonstrates how to customise kubelet settings per MachineConfigPool
 
 ---
 
-### Overview
+## Overview
 
 A **KubeletConfig** resource lets you override default kubelet parameters (e.g. `maxPods`, system-reserved resources) for a specific set of nodes selected through a MachineConfigPool label. In this module we apply two KubeletConfig objects — one for each infra pool created in module 03:
 
@@ -17,13 +17,13 @@ Both configs enable `autoSizingReserved: true`, which lets the kubelet automatic
 
 ---
 
-### Prerequisites
+## Prerequisites
 
 - Module 03 (Node MachineConfig) must be completed — the `infra-general` and `infra-logmon` MachineConfigPools must already exist.
 
 ---
 
-### Step 1 — Apply the KubeletConfig Manifests
+## Step 1 — Apply the KubeletConfig Manifests
 
 ```bash
 oc apply -f manifests/infra-general.yaml
@@ -32,7 +32,7 @@ oc apply -f manifests/infra-logmon.yaml
 
 ---
 
-### Step 2 — Verify the Rollout
+## Step 2 — Verify the Rollout
 
 Applying a KubeletConfig triggers a rolling update of the targeted MachineConfigPool. Monitor progress with:
 
@@ -50,7 +50,7 @@ oc debug node/<node-name> -- chroot /host cat /etc/kubernetes/kubelet.conf | gre
 
 ---
 
-### Manifests Reference
+## Manifests Reference
 
 | File | KubeletConfig Name | Target MCP Label | maxPods | autoSizingReserved |
 |---|---|---|---|---|

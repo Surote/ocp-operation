@@ -4,7 +4,7 @@ This module demonstrates how to work with MachineConfigPool (MCP) to manage node
 
 ---
 
-### Overview
+## Overview
 
 A **MachineConfigPool** groups nodes by label so that MachineConfig resources (NTP, file writes, kernel arguments, etc.) can target specific sets of nodes. In this example we create two custom pools for infra workloads:
 
@@ -13,7 +13,7 @@ A **MachineConfigPool** groups nodes by label so that MachineConfig resources (N
 
 ---
 
-### Step 1 — Label the Nodes
+## Step 1 — Label the Nodes
 
 Assign the appropriate role labels to worker nodes so each MCP can select them.
 
@@ -39,7 +39,7 @@ oc get no
 
 ---
 
-### Step 2 — Apply the MachineConfigPool Manifests
+## Step 2 — Apply the MachineConfigPool Manifests
 
 ```bash
 oc apply -f manifests/mcp-infra-general.yaml
@@ -50,7 +50,7 @@ oc apply -f manifests/mcp-infra-logmon.yaml
 
 ---
 
-### Step 3 — Verify
+## Step 3 — Verify
 
 Check that the new pools are created and all machines are updated:
 
@@ -64,7 +64,7 @@ Pools are healthy when `UPDATED` is `True`, `UPDATING` is `False`, and `DEGRADED
 
 ---
 
-### Manifests Reference
+## Manifests Reference
 
 | File | MCP Name | Node Selector Label |
 |---|---|---|

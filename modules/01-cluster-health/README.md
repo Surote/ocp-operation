@@ -6,7 +6,7 @@ A quick checklist of `oc` commands to assess an OpenShift cluster's overall heal
 
 ---
 
-### Cluster Operators
+## Cluster Operators
 
 Check whether every cluster operator is available, not degraded, and not progressing.
 
@@ -22,7 +22,7 @@ oc describe co <operator-name>
 
 ---
 
-### Nodes
+## Nodes
 
 Verify that all nodes are in `Ready` status.
 
@@ -44,7 +44,7 @@ oc describe node <node-name>
 
 ---
 
-### Cluster Version
+## Cluster Version
 
 Check the current cluster version and upgrade status.
 
@@ -60,7 +60,7 @@ oc describe clusterversion
 
 ---
 
-### Pods
+## Pods
 
 Find pods that are not running or healthy across all namespaces:
 
@@ -78,7 +78,7 @@ oc get pods -A | awk '$5 > 0'
 
 ---
 
-### Events
+## Events
 
 Review recent cluster-wide events for warnings or errors:
 
@@ -88,7 +88,7 @@ oc get events -A --sort-by='.lastTimestamp' --field-selector type=Warning
 
 ---
 
-### Machine Config Pool
+## Machine Config Pool
 
 Check if all machine config pools have finished rolling out:
 
@@ -100,7 +100,7 @@ Pools are healthy when `UPDATED` is `True`, `UPDATING` is `False`, and `DEGRADED
 
 ---
 
-### Certificate Signing Requests
+## Certificate Signing Requests
 
 Look for pending CSRs that might block new nodes from joining:
 

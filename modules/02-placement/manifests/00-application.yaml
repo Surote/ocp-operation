@@ -21,7 +21,7 @@ spec:
         app: timecheck
     spec:
       nodeSelector:
-        node-role.kubernetes.io/infra-logmon: ""
+        node-role.kubernetes.io/infra-general: ""
       tolerations:
         - key: node-role.kubernetes.io/infra
           operator: Equal

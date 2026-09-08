@@ -205,12 +205,18 @@ Apply the sample application that demonstrates placement on infra nodes:
 oc apply -f manifests/00-application.yaml
 ```
 
-This deploys a `timecheck-deployment` (3 replicas) with `nodeSelector` targeting `infra-logmon` nodes and a toleration for the infra taint:
+or apply using UI
+
+![paste yaml UI](../../img/module-02/placing-yaml.png)
+
+![Application pods on infra nodes](../../img/module-02/application-deploy-infra.png)
+
+This deploys a `timecheck-deployment` (3 replicas) with `nodeSelector` targeting `infra-general` nodes and a toleration for the infra taint:
 
 ```yaml
 spec:
   nodeSelector:
-    node-role.kubernetes.io/infra-logmon: ""
+    node-role.kubernetes.io/infra-general: ""
   tolerations:
     - key: node-role.kubernetes.io/infra
       operator: Equal
@@ -224,4 +230,6 @@ Verify that all pods are placed on the expected infra nodes:
 oc get pods -n 02-module -o wide
 ```
 
-![Application pods on infra nodes](../../img/module-02/application-node-selector.png)
+![Application pods on infra nodes](../../img/module-02/application-deployed.png)
+
+> **Note:** There are only 2 nodes with the `infra-general` label, so with 3 replicas, one node will have 2 pods scheduled on it.

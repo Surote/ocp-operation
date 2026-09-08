@@ -6,6 +6,7 @@ This module demonstrates how to work with MachineConfigPool (MCP) to manage node
 
 ## Overview
 
+![MCP overview](../../img/module-03/mcp-overview.png)
 A **MachineConfigPool** groups nodes by label so that MachineConfig resources (NTP, file writes, kernel arguments, etc.) can target specific sets of nodes. In this example we create two custom pools for infra workloads:
 
 - `infra-general` — general-purpose infra nodes (e.g. ingress, registry)

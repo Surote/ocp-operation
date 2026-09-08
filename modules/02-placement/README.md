@@ -68,20 +68,34 @@ oc label node <node-name> node-role.kubernetes.io/worker-
 
 ![node remove label worker](../../img/module-02/node-remove-label-worker.png)
 
+
+### Add role `infra-generic` and role `infra-observe` 
+
+```bash
+oc label node <node-name> node-role.kubernetes.io/infra-generic=
+oc label node <node-name> node-role.kubernetes.io/infra-observe=
+```
+![node add label complete](../../img/module-02/node-label-infra-complete.png)
+
+
+node diagram
+
+![node add label complete](../../img/module-02/node-label-complete-diagram.jpg)
+
 ---
 
 ## Taints
 
 Taints prevent pods from being scheduled on a node unless the pod has a matching toleration. This is commonly used to reserve infra nodes for platform components only.
 
-Check existing taints:
+### Check existing taints:
 
 ```bash
 oc get nodes -o custom-columns='NAME:.metadata.name,TAINTS:.spec.taints'
 ```
 ![existing taint](../../img/module-02/00-taint.png)
 
-Taint all infra nodes:
+### Taint all infra nodes:
 
 | Field | Value |
 |---|---|
@@ -93,7 +107,7 @@ Taint all infra nodes:
 oc adm taint node -l node-role.kubernetes.io/infra node-role.kubernetes.io/infra=reserved:NoSchedule
 ```
 
-Check taints:
+### Check taints:
 
 ```bash
 oc get nodes -o custom-columns='NAME:.metadata.name,TAINTS:.spec.taints'
@@ -101,7 +115,7 @@ oc get nodes -o custom-columns='NAME:.metadata.name,TAINTS:.spec.taints'
 
 ![oc get nodes with taint](../../img/module-02/01-taint.png)
 
-Remove the taint (trailing `-`):
+### Remove the taint (trailing `-`):
 
 ```bash
 oc adm taint node -l node-role.kubernetes.io/infra node-role.kubernetes.io/infra-

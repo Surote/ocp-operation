@@ -135,3 +135,6 @@ Once applied, the `KubeNodeNotReady` alert will carry the `team = platform-infra
 > **Note:** `AlertRelabelConfig` only modifies labels on the Alertmanager side. The relabeled labels will appear in Alertmanager and in notifications (e.g. email, webhook), but they will **not** be visible in the OpenShift web console Observe > Alerting UI, which reads alerts directly from Prometheus before relabeling is applied.
 
 ![Alert relabel email result](../../img/module-05/alert-relabel-email.png)
+
+หรือส่งผ่าน slack
+![Alert relabel email result](../../img/module-05/warning-slack.png)

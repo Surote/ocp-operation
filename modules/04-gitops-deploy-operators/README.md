@@ -59,6 +59,7 @@ The application detail tree shows all managed resources — namespace, subscript
 
 กลับมาที่ gitops เพื่อตั้งค่า operator ผ่าน scansetting และ scansettingbinding
 ![applied ss](../../img/module-04/gitops-apply-ss.png)
+![applied ssb](../../img/module-04/gitops-apply-ssb-all.png)
 
 ---
 

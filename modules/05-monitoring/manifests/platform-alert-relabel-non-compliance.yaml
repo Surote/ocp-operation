@@ -1,0 +1,12 @@
+apiVersion: monitoring.openshift.io/v1
+kind: AlertRelabelConfig
+metadata:
+  name: ocp-non-compliance
+  namespace: openshift-monitoring
+spec:
+  configs:
+    - sourceLabels: [alertname]
+      regex: "NonCompliant"
+      targetLabel: team
+      replacement: platform-infra
+      action: Replace

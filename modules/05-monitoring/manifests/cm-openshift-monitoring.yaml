@@ -7,7 +7,7 @@ data:
   config.yaml: |
     alertmanagerMain:
       nodeSelector:
-        node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/infra-observe: ""
       tolerations:
       - key: "node-role.kubernetes.io/infra"
         operator: "Exists"
@@ -22,12 +22,12 @@ data:
               storage: 1Gi
     prometheusK8s:
       nodeSelector:
-        node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/infra-observe: ""
       tolerations:
       - key: "node-role.kubernetes.io/infra"
         operator: "Exists"
         effect: "NoSchedule"
-      retention: 15d
+      retention: 2d
       volumeClaimTemplate:
         metadata:
           name: prometheus-data
@@ -38,49 +38,49 @@ data:
               storage: 100Gi
     prometheusOperator:
       nodeSelector:
-        node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/infra-observe: ""
       tolerations:
       - key: "node-role.kubernetes.io/infra"
         operator: "Exists"
         effect: "NoSchedule"
     monitoringPlugin:
       nodeSelector:
-        node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/infra-observe: ""
       tolerations:
       - key: "node-role.kubernetes.io/infra"
         operator: "Exists"
         effect: "NoSchedule"
     metricsServer:
       nodeSelector:
-        node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/infra-observe: ""
       tolerations:
       - key: "node-role.kubernetes.io/infra"
         operator: "Exists"
         effect: "NoSchedule"
     kubeStateMetrics:
       nodeSelector:
-        node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/infra-observe: ""
       tolerations:
       - key: "node-role.kubernetes.io/infra"
         operator: "Exists"
         effect: "NoSchedule"
     telemeterClient:
       nodeSelector:
-        node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/infra-observe: ""
       tolerations:
       - key: "node-role.kubernetes.io/infra"
         operator: "Exists"
         effect: "NoSchedule"
     openshiftStateMetrics:
       nodeSelector:
-        node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/infra-observe: ""
       tolerations:
       - key: "node-role.kubernetes.io/infra"
         operator: "Exists"
         effect: "NoSchedule"
     thanosQuerier:
       nodeSelector:
-        node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/infra-observe: ""
       tolerations:
       - key: "node-role.kubernetes.io/infra"
         operator: "Exists"

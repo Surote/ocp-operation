@@ -30,6 +30,29 @@ All components are pinned to infra nodes with a matching toleration for `node-ro
 
 ---
 
+## Check existing monitoring workloads
+
+```bash
+oc get pod -n openshift-monitoring -o wide
+```
+![Existing prometheus](../../img/module-05/existing-prom.png)
+
+pods ต่างๆของ monitoring จะรันอยู่ที่ worker nodes ทั้งหมด ยกเว้น `daemonset` เนื่องจาก `infra` node เราได้ทำการ `tainted` ไว้ 
+
+
+## Move Monitoring components to infra nodes
+
+ทำการย้าย pods ต่างๆของ monitoring ไปไว้ที่ `infra` node เพื่อประหยัดพื้นที่ของ worker เพื่อใช้งานได้เต็มที่สำหรับ application workload
+
+```bash
+oc apply -f manifests/cm-openshift-monitoring.yaml
+```
+
+pods ต่างๆจะเริ่มย้ายไปรันที่ `infra` node
+![Moving to infra node](../../img/module-05/move-monitoring-to-infra.png)
+
+
+---
 ### Changing Prometheus Retention
 
 Edit the `prometheusK8s.retention` field in the ConfigMap:
@@ -40,7 +63,7 @@ oc edit configmap cluster-monitoring-config -n openshift-monitoring
 
 ```yaml
 prometheusK8s:
-  retention: 30d
+  retention: 10d
 ```
 
 ---

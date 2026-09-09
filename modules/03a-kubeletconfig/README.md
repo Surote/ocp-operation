@@ -44,7 +44,13 @@ oc apply -f manifests/infra-observe.yaml
 
 Applying a KubeletConfig triggers a rolling update of the targeted MachineConfigPool. Monitor progress with:
 
+![Applied kubeletconfig](../../img/module-03a/applied-kubeletconfig.png)
 
+`oc get node`
+![Node rolling cli](../../img/module-03a/node-rolling-cli.png)
+
+`Compute > Nodes`
+![Node rolling UI](../../img/module-03a/node-rolling-ui.png)
 
 ```bash
 oc get mcp -w

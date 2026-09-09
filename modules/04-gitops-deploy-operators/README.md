@@ -67,8 +67,11 @@ The application detail tree shows all managed resources — namespace, subscript
 
 After the operator is installed and the scan runs, check the results:
 
+![Compliance scan pods](../../img/module-04/checking-all-nodes-scan.png)
+
 ```bash
 oc get compliancesuite -n openshift-compliance
+oc get compliancescan -A
 ```
 
-![Compliance scan results](../../img/module-04/compliance-scan-results.png)
+![Compliance scan results](../../img/module-04/compliance-simple-check.png)

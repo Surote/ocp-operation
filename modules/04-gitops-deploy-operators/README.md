@@ -8,7 +8,7 @@ This module demonstrates deploying the **Compliance Operator** via OpenShift Git
 
 - OpenShift Gitops Operator deployed
 
-- Cluster nodes should be ready with the expected roles (control-plane, infra) - because the compliance operator scansetting matched role:
+- Cluster nodes should be ready with the expected roles (control-plane, infra, pure-worker) - because the compliance operator scansetting matched role:
 
 ![oc get nodes](../../img/module-04/oc-get-nodes.png)
 

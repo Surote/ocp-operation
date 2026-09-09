@@ -48,7 +48,8 @@ pods ต่างๆของ monitoring จะรันอยู่ที่ wo
 oc apply -f manifests/cm-openshift-monitoring.yaml
 ```
 
-pods ต่างๆจะเริ่มย้ายไปรันที่ `infra` node
+pods ต่างๆจะเริ่มย้ายไปรันที่ `infra` node และมี PVC เพื่อใช้ในการเก็บข้อมูล metrics ของ prometheus และ alertmanager ที่ใช้ในการเก็บข้อมูลสำหรับการแจ้งเตือน
+สังเกตุว่า pods ต่างๆจะไปรันอยู่ที่ `infra` node ที่ 5-6 เนื่องจาก config มีการเลือก node label ให้ใช้ `infra-observe`
 ![Moving to infra node](../../img/module-05/move-monitoring-to-infra.png)
 
 

@@ -2,7 +2,7 @@
 
 ## HostAliases Testing
 
-`hostAliases` ใช้สำหรับเพิ่ม entry ลงใน `/etc/hosts` ของ Pod โดยตรง โดยไม่ต้องแก้ไข DNS server  
+`hostAliases` ใช้สำหรับเพิ่ม entry ลงใน `/etc/hosts` ของ Pod/Deployment โดยตรง โดยไม่ต้องแก้ไข DNS server  
 เหมาะสำหรับ:
 - ทดสอบ internal hostname resolution
 - override DNS ชั่วคราวในระดับ Pod

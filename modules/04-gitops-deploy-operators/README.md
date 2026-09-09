@@ -43,15 +43,22 @@ Apply the Argo CD Application:
 oc apply -f application.yaml
 ```
 
-This creates an Application named `compliance-operator` in the `openshift-gitops` namespace that syncs the manifests directory with auto-prune and self-heal enabled.
+เลือกติดตั้งเฉพาะ namespace, operatorgroup, subscription เพื่อติดตั้ง operator ก่อนตั้งค่า
 
-Once synced, the Argo CD dashboard shows the application as Healthy and Synced:
-
-![Argo CD application list](../../img/module-04/argocd-app-list.png)
+![Argo CD application list](../../img/module-04/compliance-msync-only-operator.png)
 
 The application detail tree shows all managed resources — namespace, subscription, operator group, scan setting, and scan setting binding:
 
-![Argo CD application detail tree](../../img/module-04/argocd-app-detail-tree.png)
+![approve manual operator](../../img/module-04/back-to-ocp-approve.png)
+
+![approve manual operator](../../img/module-04/ocp-approve-ip-0.png)
+
+![approve manual operator](../../img/module-04/ocp-approve-ip-1.png)
+
+![approve manual operator](../../img/module-04/ocp-approve-ip-2.png)
+
+กลับมาที่ gitops เพื่อตั้งค่า operator ผ่าน scansetting และ scansettingbinding
+![applied ss](../../img/module-04/gitops-apply-ss.png)
 
 ---
 

@@ -20,8 +20,8 @@ schedule: 0 17 * * *
 suspend: false
 # the roles need to be updated to the roles in the cluster
 roles:
-  - master
   - infra
+  - worker
 apiVersion: compliance.openshift.io/v1alpha1
 maxRetryOnTimeout: 3
 scanTolerations:

@@ -21,6 +21,8 @@ A **MachineConfigPool** groups nodes by label so that MachineConfig resources (N
 
 ## Existing MachineConfigPools
 
+โดยทั่วไปเมื่อติดตั้ง OpenShift เรียบร้อย จะมี 2 MachineConfigPools ติดมาตั้งแต่แรกคือ `master` และ `worker`
+
 By default, OpenShift ships with two MachineConfigPools: `master` and `worker`.
 
 ```bash
@@ -29,7 +31,11 @@ oc get mcp
 
 ![Existing MCP](../../img/module-03/existing-mcp.png)
 
-Notice the `worker` pool shows **MACHINECOUNT 2** instead of 6. This is because in the previous module we removed the `node-role.kubernetes.io/worker` label from the infra nodes. Since the `worker` MCP selects nodes by that label, those infra nodes are no longer counted in the `worker` pool.
+
+
+> **เพิ่มเติม:** สังเกตุว่า `worker` pool มีแค่ 2 เครื่องเท่านั้น แทนที่จะเป็น 6 เนื่องจากใน 02-placement เราได้ลบ role `worker` ออกไป 4 เครื่อง และใส่ `infra` เข้าไปแทน ทำให้ 4 เครื่องของ `infra` ตอนนี้ยังไม่มี machineconfigpool ไหนที่เหมาะสมเนื่องจาก machineconfigpool จะเลือกเครื่องจาก label
+
+> **Note:** Notice the `worker` pool shows **MACHINECOUNT 2** instead of 6. This is because in the previous module we removed the `node-role.kubernetes.io/worker` label from the infra nodes. Since the `worker` MCP selects nodes by that label, those infra nodes are no longer counted in the `worker` pool.
 
 ---
 

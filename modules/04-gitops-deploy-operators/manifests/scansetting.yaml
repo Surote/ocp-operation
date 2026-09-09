@@ -4,6 +4,8 @@ autoApplyRemediations: false
 metadata:
   name: rs-on-workers
   namespace: openshift-compliance
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 debug: true
 kind: ScanSetting
 showNotApplicable: false

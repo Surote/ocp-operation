@@ -1,0 +1,50 @@
+apiVersion: csi.ceph.io/v1
+kind: Driver
+metadata:
+  name: openshift-storage.cephfs.csi.ceph.com
+  namespace: openshift-storage
+spec:
+  controllerPlugin:
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        operator: Exists
+  nodePlugin:
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        operator: Exists
+---
+apiVersion: csi.ceph.io/v1
+kind: Driver
+metadata:
+  name: openshift-storage.nfs.csi.ceph.com
+  namespace: openshift-storage
+spec:
+  controllerPlugin:
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        operator: Exists
+  nodePlugin:
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        operator: Exists
+---
+apiVersion: csi.ceph.io/v1
+kind: Driver
+metadata:
+  name: openshift-storage.rbd.csi.ceph.com
+  namespace: openshift-storage
+spec:
+  controllerPlugin:
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        operator: Exists
+  nodePlugin:
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        operator: Exists

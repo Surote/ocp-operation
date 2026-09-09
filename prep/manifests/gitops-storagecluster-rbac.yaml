@@ -13,6 +13,16 @@ rules:
       - watch
       - patch
       - update
+  - apiGroups:
+      - csi.ceph.io
+    resources:
+      - drivers
+    verbs:
+      - get
+      - list
+      - watch
+      - patch
+      - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

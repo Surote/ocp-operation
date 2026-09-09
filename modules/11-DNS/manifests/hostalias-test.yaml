@@ -33,7 +33,7 @@ spec:
             - "cache.internal.example.com"
       containers:
         - name: dns-test
-          image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+          image: quay.io/rh_ee_swongpai/ubi9-toolbox:v0.0.2
           command:
             - /bin/sh
             - -c

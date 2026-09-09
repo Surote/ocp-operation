@@ -71,7 +71,7 @@ oc delete -f modules/11-DNS/manifests/hostalias-test.yaml
 
 ใช้ `spec.servers` ใน `DNS/default` (operator.openshift.io) เพื่อ forward DNS query ของ domain ที่ระบุไปยัง upstream DNS server ภายนอก แทนที่จะ resolve ผ่าน CoreDNS ของ cluster
 
-### ตัวอย่าง: Forward `notion.so` ไปยัง `8.8.4.4`
+### ตัวอย่าง: Forward `notion.so` ไปยัง `8.8.8.8`
 
 ```bash
 oc patch dns.operator.openshift.io/default --type=merge -p '
@@ -86,7 +86,7 @@ oc patch dns.operator.openshift.io/default --type=merge -p '
         "forwardPlugin": {
           "policy": "Random",
           "upstreams": [
-            "8.8.4.4"
+            "8.8.8.8"
           ]
         }
       }
@@ -137,7 +137,10 @@ oc get configmap dns-default -n openshift-dns -o yaml
 ### Testing 
 <WIP will use tcpdump toolbox>
 
+WIP : notion.so will call to 8.8.8.8 upstream
 ![tcpdump notion ](../../img/module-11/tcpdump-notion.png)
+
+WIP : normal upstream
 ![tcpdump redhat normal upstream](../../img/module-11/tcpdump-redhat.png)
 
 ### Forward Plugin Policy

@@ -9,8 +9,8 @@ spec:
   limits:
     global:
       ingestion:
-        ingestionBurstSize: 120
-        ingestionRate: 60
+        ingestionBurstSize: 240
+        ingestionRate: 120
       queries:
         queryTimeout: 3m
       retention:

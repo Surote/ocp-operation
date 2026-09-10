@@ -52,6 +52,8 @@ oc apply -f manifests/loki-config/00-obc.yaml
 
 This creates an `ObjectBucketClaim` named `loki` in `openshift-logging` backed by the NooBaa storage class.
 
+![Create bucket](../../img/module-06/apply-obc.png)
+
 ---
 
 ### Step 3 — Create Service Account and ClusterRoleBindings
@@ -67,6 +69,7 @@ Creates a `collector` service account with the following cluster roles:
 - `collect-audit-logs`
 - `collect-infrastructure-logs`
 
+![Create sa](../../img/module-06/create-sa-logging.png)
 ---
 
 ### Step 4 — Create Loki Secret from Bucket Credentials

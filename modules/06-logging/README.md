@@ -182,6 +182,7 @@ spec:
       memory: 128Mi
   tolerations:
     - operator: Exists
-
 ```
+
+![logging dashboard](../../img/module-06/logging-dashboard.png)
 

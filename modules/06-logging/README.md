@@ -76,10 +76,13 @@ Creates a `collector` service account with the following cluster roles:
 
 ```bash
 cd manifests/loki-config
+chmod +x 02-get_secret.sh
 ./02-get_secret.sh
 ```
 
 The script extracts the access key, secret key, bucket name, and endpoint from the OBC and creates a secret named `loki-sec` in `openshift-logging`.
+
+![Create and copy secret object to logging](../../img/module-06/copy-secret-bucket-to-logging.png)
 
 ---
 
@@ -94,8 +97,10 @@ Key configuration:
 - Size: `1x.pico`
 - Retention: `1 day`
 - Storage: `ocs-external-storagecluster-ceph-rbd`
-- All components pinned to infra nodes via `node-role.kubernetes.io/infra` node selector
+- All components pinned to infra nodes via `node-role.kubernetes.io/infra-observe` node selector
+- All components added toleration for `node-role.kubernetes.io/infra=reserved:NoSchedule`
 
+![get pod logging](../../img/module-06/get-pods.png)
 ---
 
 ### Step 6 — Deploy ClusterLogForwarder

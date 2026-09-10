@@ -111,6 +111,8 @@ oc apply -f manifests/loki-config/04-logging.yaml
 
 Forwards `application`, `infrastructure`, and `audit` logs to the LokiStack. The collector tolerates all taints and uses the `collector` service account created in Step 3.
 
+![get pod for collector](../../img/module-06/collector.png)
+
 ---
 
 ### Step 7 — Enable Logging UI Plugin

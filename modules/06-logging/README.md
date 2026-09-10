@@ -123,6 +123,8 @@ oc apply -f manifests/loki-config/05-ui-plugin.yaml
 
 Adds the Logging UI plugin to the OpenShift console, connected to the `lokistack` instance.
 
+![logging dashboard](../../img/module-06/log-dashboard.png)
+
 ---
 
 ### Updating Collector Resources

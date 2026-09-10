@@ -186,3 +186,6 @@ spec:
 
 ![logging dashboard](../../img/module-06/logging-dashboard.png)
 
+![logfileexporter](../../img/module-06/logfileexporter.png)
+
+![logfileexporter-2](../../img/module-06/logfileexporter-2.png)

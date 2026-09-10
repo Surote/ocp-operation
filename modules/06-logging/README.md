@@ -25,6 +25,8 @@ oc apply -f manifests/coo/
 oc apply -f manifests/logging/
 oc apply -f manifests/loki/
 ```
+![Applied operators](../../img/module-06/apply-operator.png)
+
 
 Approve the install plans manually:
 
@@ -35,6 +37,10 @@ oc get installplan -n openshift-operators-redhat
 
 oc patch installplan <plan-name> -n <namespace> --type merge -p '{"spec":{"approved":true}}'
 ```
+หรือใช้จากหน้า UI
+
+![Approve operators](../../img/module-06/operators-pendings.png)
+
 
 ---
 

@@ -30,24 +30,52 @@ spec:
   template:
     compactor:
       nodeSelector:
-        node-role.kubernetes.io/infra: ''
+        node-role.kubernetes.io/infra-observe: ''
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/infra
+          operator: Exists
     distributor:
       nodeSelector:
-        node-role.kubernetes.io/infra: ''
+        node-role.kubernetes.io/infra-observe: ''
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/infra
+          operator: Exists
     gateway:
       nodeSelector:
-        node-role.kubernetes.io/infra: ''
+        node-role.kubernetes.io/infra-observe: ''
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/infra
+          operator: Exists
     indexGateway:
       nodeSelector:
-        node-role.kubernetes.io/infra: ''
+        node-role.kubernetes.io/infra-observe: ''
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/infra
+          operator: Exists
     ingester:
       nodeSelector:
-        node-role.kubernetes.io/infra: ''
+        node-role.kubernetes.io/infra-observe: ''
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/infra
+          operator: Exists
     querier:
       nodeSelector:
-        node-role.kubernetes.io/infra: ''
+        node-role.kubernetes.io/infra-observe: ''
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/infra
+          operator: Exists
     queryFrontend:
       nodeSelector:
-        node-role.kubernetes.io/infra: ''
+        node-role.kubernetes.io/infra-observe: ''
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/infra
+          operator: Exists
   tenants:
     mode: openshift-logging

@@ -110,3 +110,10 @@ In the BYOIP web app, add a mapping rule:
 Then browse to `https://timecheck.swongpai.tt.local` through the BYOIP proxy to verify the route, TLS certificate, and application response.
 
 ![7-02](../../img/module-07/7-02.png)
+
+check ingress sharded logs 
+
+```
+oc logs -f -l ingresscontroller.operator.openshift.io/deployment-ingresscontroller=sharded -n openshift-ingress -c logs
+```
+![7-02](../../img/module-07/ingress-logs.png)

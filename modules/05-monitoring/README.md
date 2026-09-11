@@ -138,3 +138,30 @@ Once applied, the `KubeNodeNotReady` alert will carry the `team = platform-infra
 
 หรือส่งผ่าน slack
 ![Alert relabel email result](../../img/module-05/warning-slack.png)
+
+---
+
+## Custom dashboard with Perse 
+
+Cluster Observe Operator 1.5+ GA ทำให้เราสามารถปรับแต่ง dashboard และ panel เองได้ ตาม promQL ที่เราต้องการจาก metric ที่เรามีใน cluster ได้
+
+- ทำหลังจาก 06-logging
+
+สร้าง UIplugin เพื่อเปิดใช้งาน custom dashboard
+```bash 
+oc apply -f manifests/perses-monitoring-custom-dashboard.yaml
+```
+>**re-authentication required**
+
+ตัวอย่าง dashboard ที่สร้างแล้ว สามารถ import เข้าไปได้คล้ายๆ grafana json
+
+
+```bash 
+oc apply -f manifests/perses-example-dashboard.yaml
+```
+
+>เลือก project: openshift-observability แล้วไปที่ Observe>Dashboards (Perses) เลือก Dashboard ที่ชื่อ example lab-dashboard
+
+![Example Perses](../../img/module-05/perses-example-01.png)
+
+![Example Perses](../../img/module-05/perses-example-02.png)

@@ -47,8 +47,7 @@ spec:
       - key: type
         operator: NotIn
         values:
-          - sharded
-'
+          - sharded'
 ```
 
 This ensures routes with `type: sharded` are only served by the sharded IngressController.
@@ -61,6 +60,10 @@ This ensures routes with `type: sharded` are only served by the sharded IngressC
 oc apply -f manifests/sample-application.yaml
 ```
 
+![Application pod](../../img/module-07/sample-application-deployed.png)
+
+![Application route](../../img/module-07/application-route.png)
+
 This creates a namespace `sample-application` with:
 - A `timecheck` Deployment and Service (port 8000)
 - A Route with host `timecheck.swongpai.tt.local`, label `type: sharded`, and TLS edge termination
@@ -72,7 +75,7 @@ This creates a namespace `sample-application` with:
 ```bash
 oc apply -f manifests/byoip-cert-check-application.yaml
 ```
-
+![BYOIP test application](../../img/module-07/byoip-test.png)
 A helper web app that lets you add DNS mapping rules and browse through the sharded ingress to verify TLS certificates and connectivity.
 
 ---

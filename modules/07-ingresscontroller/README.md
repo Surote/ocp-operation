@@ -128,9 +128,23 @@ oc logs -f -l ingresscontroller.operator.openshift.io/deployment-ingresscontroll
 oc create secret tls sharded-custom-cert --cert=./manifests/demo-cert/default.crt --key=./manifests/demo-cert/default.key -n openshift-ingress
 ```
 
+![default cert sharded applied](../../img/module-07/create-default-cert.png)
+
 ```bash
 oc patch ingresscontroller.operator sharded \
   --type=merge \
   -p '{"spec":{"defaultCertificate":{"name":"sharded-custom-cert"}}}' \
   -n openshift-ingress-operator
+```
+
+![patched cert sharded applied](../../img/module-07/patched-default-cert.png)
+
+
+ตรวจสอบ cert ของหน้าเว็บไซต์อีกครั้งผ่าน byoip application
+![patched cert sharded applied](../../img/module-07/byoip-check-default-cert.png)
+
+## Replacing custome cert to route sharded
+
+```bash
+oc create secret tls sharded-custom-cert --cert=./manifests/demo-cert/replace_default.crt --key=./manifests/demo-cert/replace_default.key -n openshift-ingress --dry-run=client -o yaml | oc replace -f -
 ```

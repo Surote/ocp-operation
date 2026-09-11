@@ -117,3 +117,20 @@ check ingress sharded logs
 oc logs -f -l ingresscontroller.operator.openshift.io/deployment-ingresscontroller=sharded -n openshift-ingress -c logs
 ```
 ![7-02](../../img/module-07/ingress-logs.png)
+
+---
+
+## Apply custom cert to route sharded
+
+เพราะว่าไม่ใช่ default router ที่ถือ domain *.apps การทำ custom ca bundle สำหรับ route sharded เป็นทางเลือกที่ทำได้
+
+```bash
+oc create secret tls sharded-custom-cert --cert=./manifests/demo-cert/default.crt --key=./manifests/demo-cert/default.key -n openshift-ingress
+```
+
+```bash
+oc patch ingresscontroller.operator sharded \
+  --type=merge \
+  -p '{"spec":{"defaultCertificate":{"name":"sharded-custom-cert"}}}' \
+  -n openshift-ingress-operator
+```

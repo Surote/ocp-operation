@@ -103,6 +103,7 @@ Apply the relabel config:
 
 ```bash
 oc apply -f manifests/platform-alert-relabel-01.yaml
+oc apply -f manifests/platform-alert-relabel-non-compliance.yaml
 ```
 
 This example adds a `team: platform-infra` label to the `KubeNodeNotReady` alert:

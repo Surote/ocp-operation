@@ -10,11 +10,18 @@ By default, the `default` IngressController handles all routes. With sharding, y
 
 ---
 
-### Step 1 — Create the Sharded IngressController
+## Existing
+
+![Default router](../../img/module-07/existing-router.png)
+
+
+## Create the Sharded IngressController
 
 ```bash
 oc apply -f manifests/sharding.yaml
 ```
+
+![Sharded router](../../img/module-07/applied-sharded.png)
 
 Key configuration in `sharding.yaml`:
 
@@ -28,7 +35,7 @@ Key configuration in `sharding.yaml`:
 
 ---
 
-### Step 2 — Update the Default IngressController
+## Update the Default IngressController
 
 To prevent the default IngressController from also handling sharded routes, add a `routeSelector` that excludes them:
 
@@ -48,7 +55,7 @@ This ensures routes with `type: sharded` are only served by the sharded IngressC
 
 ---
 
-### Step 3 — Deploy the Sample Application
+## Deploy the Sample Application
 
 ```bash
 oc apply -f manifests/sample-application.yaml
@@ -60,7 +67,7 @@ This creates a namespace `sample-application` with:
 
 ---
 
-### Step 4 — Deploy the BYOIP Cert-Check Application (optional)
+## Deploy the BYOIP Cert-Check Application (optional)
 
 ```bash
 oc apply -f manifests/byoip-cert-check-application.yaml
@@ -70,7 +77,7 @@ A helper web app that lets you add DNS mapping rules and browse through the shar
 
 ---
 
-### Step 5 — Get the Node IP and NodePort
+## Get the Node IP and NodePort
 
 Find the internal IP of the node where the sharded router pod is running:
 
@@ -90,7 +97,7 @@ oc get svc -n openshift-ingress router-nodeport-sharded -o jsonpath='{.spec.port
 
 ---
 
-### Step 6 — Test the Route
+## Test the Route
 
 In the BYOIP web app, add a mapping rule:
 

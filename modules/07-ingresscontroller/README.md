@@ -148,3 +148,13 @@ oc patch ingresscontroller.operator sharded \
 ```bash
 oc create secret tls sharded-custom-cert --cert=./manifests/demo-cert/replace_default.crt --key=./manifests/demo-cert/replace_default.key -n openshift-ingress --dry-run=client -o yaml | oc replace -f -
 ```
+
+![replace cert sharded applied](../../img/module-07/replace-cert.png)
+
+Router pod จะทำการตรวจสอบ secret ที่ถูกแก้แล้วทำการ reload process ข้างในโดยที่ pod ไม่ได้ถูก rolling
+
+![replace cert sharded applied 2](../../img/module-07/haproxy-router-detect-secret-changed.png)
+
+ตรวจสอบ cert ที่ byoip อีกครั้ง
+
+![replace cert sharded applied 2](../../img/module-07/cert-changed.png)

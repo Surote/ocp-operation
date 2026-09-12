@@ -11,7 +11,9 @@ kind: OperatorGroup
 metadata:
   name: vertical-pod-autoscaler
   namespace: openshift-vertical-pod-autoscaler
-spec: {}
+spec:
+  targetNamespaces:
+  - openshift-vertical-pod-autoscaler
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription

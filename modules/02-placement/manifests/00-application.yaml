@@ -55,7 +55,6 @@ metadata:
   namespace: 02-module
   labels:
     app: timecheck
-    type: sharded
 spec:
   to:
     kind: Service

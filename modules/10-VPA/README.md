@@ -18,9 +18,9 @@ VPA monitors historical and real-time resource usage of pods, then:
 
 | Mode | Description |
 |---|---|
-| `Off` | VPA only provides recommendations — does not modify pods |
-| `Initial` | VPA assigns resources at pod creation only — no updates to running pods |
-| `Auto` | VPA evicts and recreates pods when recommendations change significantly |
+| `Off` | VPA only provides recommendations — does not modify pods - แนะนำอย่างเดียวไม่แก้ไขค่าของ application pod |
+| `Initial` | VPA assigns resources at pod creation only — no updates to running pods - ใส่ค่าตั้งต้นให้เท่านั้น |
+| `Auto` | VPA evicts and recreates pods when recommendations change significantly - rolling pod เพื่ออัพเดทค่าที่ VPA แนะนำ|
 
 > **Tip:** Start with `Off` to observe recommendations before enabling `Auto` in production.
 
@@ -90,8 +90,10 @@ oc apply -f modules/10-VPA/manifests/02-module-deployment-vpa.yaml
 ### Check Recommendations
 
 ```bash
-oc get vpa vpa-02-module -n 02-module -o yaml
+oc get vpa timecheck-deployment-vpa -n 02-module -o yaml
 ```
+![Recommend pod](../../img/module-10/get-vpa.png)
+
 
 VPA recommendations appear under `status.recommendation.containerRecommendations`:
 

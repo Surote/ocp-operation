@@ -134,6 +134,21 @@ oc get limitrange -n 08-module
 
 ---
 
+## Deploy sample application without resource assign
+
+```bash
+oc apply -f manifests/00-sample-application-08.yaml 
+```
+
+ใน deployment ไม่ได้ใส่ resource request และ limit
+![Deploy sample application](../../img/module-08/deploy-sample-application.png)
+
+หลังจาก deploy application resource request และ limit จะถูก assign ให้อัตโนมัติจาก limitrange ที่ตั้งค่าไว้
+
+![Deploy sample application](../../img/module-08/auto-resource-assigned.png)
+
+---
+
 ### How They Work Together
 
 | | ResourceQuota | LimitRange |

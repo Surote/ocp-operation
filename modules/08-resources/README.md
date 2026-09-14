@@ -61,6 +61,8 @@ Check current usage against the quota:
 oc describe quota example-quota -n 08-module
 ```
 
+![Describe quota](../../img/module-08/describe-quota.png)
+
 ```bash
 oc get resourcequota -n 08-module
 ```
@@ -123,6 +125,8 @@ Check the active limit range:
 ```bash
 oc describe limitrange example-limits -n 08-module
 ```
+
+![Describe limitrange](../../img/module-08/describe-limitrange.png)
 
 ```bash
 oc get limitrange -n 08-module

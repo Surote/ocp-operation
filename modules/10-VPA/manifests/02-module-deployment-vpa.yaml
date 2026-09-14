@@ -7,7 +7,7 @@ spec:
   resourcePolicy:
     containerPolicies:
     - containerName: '*'
-      controlledValues: RequestsAndLimit
+      controlledValues: RequestsAndLimits
       controlledResources:
       - cpu
       - memory

@@ -6,6 +6,12 @@ A collection of modules for OpenShift Container Platform day-2 operations — co
 
 ---
 
+### Prep
+
+| Section | Description |
+|---|---|
+| [Prep](prep/) | Cluster preparation manifests — DNS operator toleration, IngressController replicas, VPA operator install, CSI/ODF tolerations, web terminal, GitOps RBAC, and cluster admin group |
+
 ### Modules
 
 | Module | Topic | Description |
@@ -14,8 +20,11 @@ A collection of modules for OpenShift Container Platform day-2 operations — co
 | [02 - Placement](modules/02-placement/) | Placement | Node labeling, taints/tolerations, node selectors, and pod placement |
 | [03 - Node MachineConfig](modules/03-node-machineconfig/) | Node MachineConfig | MachineConfigPool (MCP) management and machine-level node configuration |
 | [03a - KubeletConfig](modules/03a-kubeletconfig/) | KubeletConfig | Kubelet configuration for custom MachineConfigPools (maxPods, autoSizingReserved) |
-| [04 - GitOps Deploy Operators](modules/04-gitops-deploy-operators/) | GitOps / Operators | Deploying operators (Compliance Operator) via Argo CD with auto-sync |
+| [04 - GitOps Deploy Operators](modules/04-gitops-deploy-operators/) | GitOps / Operators | Deploying operators (Compliance Operator) via Argo CD with sync waves |
 | [05 - Monitoring](modules/05-monitoring/) | Monitoring | Monitoring stack configuration, Prometheus retention/storage, and AlertRelabelConfig |
 | [06 - Logging](modules/06-logging/) | Logging | OpenShift logging with LokiStack and ODF MCG (NooBaa) for S3 storage |
 | [07 - IngressController](modules/07-ingresscontroller/) | Ingress | IngressController sharding with NodePortService and custom domain routing |
 | [08 - Resources](modules/08-resources/) | Resources | ResourceQuota and LimitRange for namespace resource control |
+| [09 - Troubleshooting](modules/09-troubleshooting/) | Troubleshooting | Symptom-first troubleshooting lab covering image, scheduling, quota, network, storage, and config failures |
+| [10 - VPA](modules/10-VPA/) | Vertical Pod Autoscaler | Vertical Pod Autoscaler configuration and usage |
+| [11 - DNS](modules/11-DNS/) | DNS | HostAliases testing and DNS forward plugin configuration for custom upstream resolution |

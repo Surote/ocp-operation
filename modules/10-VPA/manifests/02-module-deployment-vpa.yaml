@@ -22,4 +22,4 @@ spec:
     kind: Deployment
     name: timechecker-deployment
   updatePolicy:
-    updateMode: Off # Off means VPA will not update the resources of the pods, Auto means VPA will update the resources of the pods based on the usage of the pods.
+    updateMode: Auto

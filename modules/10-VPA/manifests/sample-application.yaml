@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: timecheck-fastapi
-          image: quay.io/rh_ee_swongpai/fast-localtime-check:lw-217d4d6d9b0e7886ae03b053db2c4f4cd8b104ec
+          image: quay.io/rh_ee_swongpai/fast-localtime-check:lw-00e4965359725d3bcfb4707fcc34dbf453fb4851
           ports:
             - containerPort: 8000
           resources:

@@ -10,7 +10,7 @@ spec:
     - alert: NodeMemoryUsageHigh
       expr: |
         (1 - (node_memory_MemAvailable_bytes{job="node-exporter"}
-              / node_memory_MemTotal_bytes{job="node-exporter"})) * 100 > 60
+              / node_memory_MemTotal_bytes{job="node-exporter"})) * 100 > 30
       for: 5m
       labels:
         severity: warning

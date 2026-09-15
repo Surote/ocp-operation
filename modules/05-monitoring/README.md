@@ -142,6 +142,17 @@ Once applied, the `KubeNodeNotReady` alert will carry the `team = platform-infra
 
 ---
 
+## Custom Alert
+
+เราสามารถสร้าง custom alert ตาม promql ที่เราสนใจได้เองโดยใช้ kind alertingrule ถ้่าเป็น platform alert และต้องอยู่ใน namespace openshift-monitoring สำหรับ user-workload-monitoring สามารถทำได้ใน namespace ของ application แต่จะใช้ kind prometheusrule
+
+ตัวอย่าง custom alert ที่จะส่ง alert เมื่อเครื่องมีการใช้งาน memory เกินค่าที่กำหนด
+```bash
+oc apply -f manifests/platform-alert-node-usage-high-mem.yaml
+```
+
+---
+
 ## Custom dashboard with Perse 
 
 Cluster Observe Operator 1.5+ GA ทำให้เราสามารถปรับแต่ง dashboard และ panel เองได้ ตาม promQL ที่เราต้องการจาก metric ที่เรามีใน cluster ได้

@@ -27,8 +27,8 @@ spec:
             - containerPort: 8000
           resources:
             requests:
-              cpu: 25m
-              memory: 256Mi
+              cpu: 5m
+              memory: 64Mi
           resizePolicy:
             - resourceName: cpu
               restartPolicy: NotRequired

@@ -29,11 +29,6 @@ spec:
             requests:
               cpu: 5m
               memory: 64Mi
-          resizePolicy:
-            - resourceName: cpu
-              restartPolicy: NotRequired
-            - resourceName: memory
-              restartPolicy: NotRequired
 ---
 apiVersion: v1
 kind: Service

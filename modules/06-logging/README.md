@@ -125,6 +125,8 @@ Adds the Logging UI plugin to the OpenShift console, connected to the `lokistack
 
 ![logging dashboard](../../img/module-06/log-dashboard.png)
 
+![logging dashboard](../../img/module-06/logging-ui.png)
+
 ---
 
 ### Updating Collector Resources

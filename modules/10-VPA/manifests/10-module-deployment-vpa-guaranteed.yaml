@@ -1,7 +1,7 @@
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: vpa-10-module
+  name: vpa-10-module-guaranteed
   namespace: 10-module
 spec:
   resourcePolicy:

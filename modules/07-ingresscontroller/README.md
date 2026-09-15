@@ -6,6 +6,8 @@ This module demonstrates how to create a sharded IngressController using `NodePo
 
 ### Overview
 
+![Route sharding](../../img/module-07/route-sharding-overview.jpg)
+
 By default, the `default` IngressController handles all routes. With sharding, you create additional IngressControllers that only serve routes matching a specific label selector. This is useful for separating traffic by domain, team, or environment.
 
 ---

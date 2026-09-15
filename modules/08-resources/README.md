@@ -7,7 +7,7 @@ This module covers **ResourceQuota** and **LimitRange** — two mechanisms for c
 
 ### ResourceQuota
 
-A ResourceQuota sets hard caps on the total amount of resources a namespace can consume. Pods that would exceed the quota are rejected.
+A ResourceQuota sets hard caps on the total amount of resources a namespace can consume. Pods that would exceed the quota are rejected. 
 
 Create a quota:
 
@@ -61,6 +61,9 @@ oc describe quota example-quota -n 08-module
 ```
 
 ![Describe quota](../../img/module-08/describe-quota.png)
+
+
+![Describe quota UI](../../img/module-08/quota-ui.png)
 
 ```bash
 oc get resourcequota -n 08-module

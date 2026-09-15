@@ -110,7 +110,6 @@ When VPA is set to `updateMode: InPlaceOrRecreate`, it attempts to resize contai
 
 > **⚠️ QoS Class Constraint:** In-place resize จะทำได้เฉพาะเมื่อ resource ใหม่ที่ VPA แนะนำ **ไม่ทำให้ QoS class เปลี่ยน** เท่านั้น เช่น ถ้า pod เดิมเป็น `Burstable` แล้ว resource ใหม่ทำให้กลายเป็น `Guaranteed` (requests = limits) จะไม่สามารถ resize in-place ได้ — VPA จะ fallback ไปใช้การ recreate pod แทน ดังนั้นการใช้ `controlledValues: RequestsOnly` ทำให้ QoS class ให้คงเดิม (Burstable)
 
-> **Pod ต้องมี Replicas > 1** สำหรับ In-place resize
 
 ![Recommend pod](../../img/module-10/inplace-vpa-not-restart.png)
 

@@ -151,6 +151,8 @@ Once applied, the `KubeNodeNotReady` alert will carry the `team = platform-infra
 oc apply -f manifests/platform-alert-node-usage-high-mem.yaml
 ```
 
+![custom alert](../../img/module-05/custom-alert-node-mem.png)
+
 ---
 
 ## Custom dashboard with Perse 

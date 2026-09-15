@@ -115,6 +115,105 @@ oc describe vpa vpa-02-module -n 02-module
 
 ---
 
+### In-Place Pod Resize and `resizePolicy`
+
+Starting from OpenShift 4.17+ (Kubernetes 1.27+), pods can have their CPU and memory updated **without restarting** — this is called **In-Place Pod Resize**.
+
+When VPA is set to `updateMode: InPlaceOrRecreate`, it attempts to resize containers in-place first. If in-place resize is not possible, it falls back to evicting and recreating the pod.
+
+#### How It Works
+
+The `resizePolicy` field in the container spec controls whether a resource change requires a container restart:
+
+```yaml
+containers:
+  - name: timecheck-fastapi
+    image: quay.io/rh_ee_swongpai/fast-localtime-check:lw-217d4d6d9b0e7886ae03b053db2c4f4cd8b104ec
+    resources:
+      requests:
+        cpu: 5m
+        memory: 64Mi
+    resizePolicy:
+      - resourceName: cpu
+        restartPolicy: NotRequired
+      - resourceName: memory
+        restartPolicy: NotRequired
+```
+
+#### `resizePolicy` Parameters
+
+| Field | Description |
+|---|---|
+| `resourceName` | Resource to configure: `cpu` or `memory` |
+| `restartPolicy` | `NotRequired` — resize in-place without restart; `RestartContainer` — restart the container to apply new resources |
+
+#### Behavior Matrix
+
+| `restartPolicy` | CPU change | Memory change |
+|---|---|---|
+| `NotRequired` | Applied immediately, no restart | Applied immediately, no restart |
+| `RestartContainer` | Container restarts to apply | Container restarts to apply |
+| Not specified | Defaults to `NotRequired` for CPU, `NotRequired` for memory |
+
+#### Deploy Sample Application with In-Place Resize
+
+```bash
+oc apply -f modules/10-VPA/manifests/sample-application.yaml
+```
+
+#### Deploy VPA with `InPlaceOrRecreate`
+
+```bash
+oc apply -f modules/10-VPA/manifests/10-module-deployment-vpa.yaml
+```
+
+The VPA in `10-module` uses `InPlaceOrRecreate` mode with `controlledValues: RequestsOnly` (Burstable QoS):
+
+```yaml
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa-10-module
+  namespace: 10-module
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: timecheck-deployment
+  updatePolicy:
+    updateMode: InPlaceOrRecreate
+  resourcePolicy:
+    containerPolicies:
+    - containerName: '*'
+      controlledValues: RequestsOnly
+      controlledResources:
+      - cpu
+      - memory
+      minAllowed:
+        cpu: 10m
+        memory: 25Mi
+      maxAllowed:
+        cpu: 1
+        memory: 500Mi
+```
+
+#### Verify In-Place Resize
+
+ตรวจสอบว่า pod ได้รับ resource ใหม่โดยไม่ถูก restart:
+
+```bash
+oc get pod -n 10-module -o yaml | grep -A 10 resizePolicy
+oc get pod -n 10-module -o jsonpath='{.items[*].status.resize}'
+```
+
+ถ้า `status.resize` แสดง `InProgress` หรือว่างเปล่า แสดงว่า in-place resize สำเร็จ — pod ไม่ถูก restart
+
+> **⚠️ QoS Class Constraint:** In-place resize จะทำได้เฉพาะเมื่อ resource ใหม่ที่ VPA แนะนำ **ไม่ทำให้ QoS class เปลี่ยน** เท่านั้น เช่น ถ้า pod เดิมเป็น `Burstable` แล้ว resource ใหม่ทำให้กลายเป็น `Guaranteed` (requests = limits) จะไม่สามารถ resize in-place ได้ — VPA จะ fallback ไปใช้การ recreate pod แทน ดังนั้นการใช้ `controlledValues: RequestsOnly` ทำให้ QoS class ให้คงเดิม (Burstable)
+
+![Recommend pod](../../img/module-10/inplace-vpa-not-restart.png)
+
+---
+
 ### VPA vs HPA
 
 | | VPA | HPA |

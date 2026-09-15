@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timecheck-deployment-guaranteed
+  namespace: 10-module
+  labels:
+    app: timecheck-guaranteed
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: timecheck-guaranteed
+  template:
+    metadata:
+      labels:
+        app: timecheck-guaranteed
+    spec:
+      containers:
+        - name: timecheck-fastapi-guaranteed
+          image: quay.io/rh_ee_swongpai/fast-localtime-check:lw-217d4d6d9b0e7886ae03b053db2c4f4cd8b104ec
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 5m
+              memory: 64Mi
+            limits:
+              cpu: 20m
+              memory: 128Mi
+          resizePolicy:
+            - resourceName: cpu
+              restartPolicy: NotRequired
+            - resourceName: memory
+              restartPolicy: NotRequired
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timecheck-service-guaranteed
+  namespace: 10-module
+  labels:
+    app: timecheck-guaranteed
+spec:
+  selector:
+    app: timecheck-guaranteed
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: timecheck-route-guaranteed
+  namespace: 10-module
+  labels:
+    app: timecheck-guaranteed
+spec:
+  to:
+    kind: Service
+    name: timecheck-service-guaranteed
+  port:
+    targetPort: 8000
+  tls:
+    termination: edge

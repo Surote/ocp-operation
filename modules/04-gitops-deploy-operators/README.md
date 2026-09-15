@@ -65,6 +65,8 @@ The application detail tree shows all managed resources — namespace, subscript
 
 ### Verify Compliance Scan Results
 
+![compliance-operator overview](../../img/module-04/compliance-operator-overview.png)
+
 After the operator is installed and the scan runs, check the results:
 
 ![Compliance scan pods](../../img/module-04/checking-all-nodes-scan.png)

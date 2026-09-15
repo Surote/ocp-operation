@@ -7,7 +7,7 @@ spec:
   resourcePolicy:
     containerPolicies:
     - containerName: '*'
-      controlledValues: RequestsAndLimits
+      controlledValues: RequestsOnly # QoS Burstable 
       controlledResources:
       - cpu
       - memory

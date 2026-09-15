@@ -20,7 +20,8 @@ VPA monitors historical and real-time resource usage of pods, then:
 |---|---|
 | `Off` | VPA only provides recommendations — does not modify pods - แนะนำอย่างเดียวไม่แก้ไขค่าของ application pod |
 | `Initial` | VPA assigns resources at pod creation only — no updates to running pods - ใส่ค่าตั้งต้นให้เท่านั้น |
-| `Auto` | VPA evicts and recreates pods when recommendations change significantly - rolling pod เพื่ออัพเดทค่าที่ VPA แนะนำ|
+| `Recreate` | VPA evicts and recreates pods when recommendations change significantly - rolling pod เพื่ออัพเดทค่าที่ VPA แนะนำ|
+| `InPlaceOrRecreate` | In this mode, the VPA automatically applies the recommended CPU and memory resources throughout the pod lifetime. When any pod in the project is out of alignment with the VPA recommendations, the VPA attempts to apply updates in-place, without restarting the pod. If the VPA is not able to update the containers in-place, the VPA deletes the pod - rolling pod เพื่ออัพเดทค่าที่ VPA แนะนำ|
 
 > **Tip:** Start with `Off` to observe recommendations before enabling `Auto` in production.
 
@@ -109,11 +110,8 @@ oc get vpa -n 02-module
 oc describe vpa vpa-02-module -n 02-module
 ```
 
-### Cleanup
-
-```bash
-oc delete -f modules/10-VPA/manifests/02-module-deployment-vpa.yaml
-```
+เช็ก deployment ใน 02-placement จะสังเกตุว่าไม่มี resource กำหนดใน deployment
+แต่
 
 ---
 

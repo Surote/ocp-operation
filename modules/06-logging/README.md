@@ -1,5 +1,7 @@
 # Logging
 
+![Logging overview operators](../../img/module-06/logging-overview.jpg)
+
 This module sets up OpenShift logging with LokiStack as the log store, using ODF MCG (NooBaa) for S3 object storage.
 
 ---

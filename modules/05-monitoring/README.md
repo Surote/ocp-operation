@@ -4,6 +4,8 @@ This module covers the OpenShift monitoring stack configuration — moving compo
 
 ---
 
+![Monitoring ocp overview](../../img/module-05/ocp-monitoring-overview.png)
+
 ### Monitoring Stack Configuration
 
 Apply the cluster monitoring ConfigMap to configure all monitoring components:

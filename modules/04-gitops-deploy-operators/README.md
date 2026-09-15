@@ -4,6 +4,8 @@ This module demonstrates deploying the **Compliance Operator** via OpenShift Git
 
 ---
 
+![Gitops overview](../../img/module-04/gitops-overview.png)
+
 ### Prerequisites
 
 - OpenShift Gitops Operator deployed

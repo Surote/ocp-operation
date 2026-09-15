@@ -21,42 +21,7 @@ VPA monitors historical and real-time resource usage of pods, then:
 | `Off` | VPA only provides recommendations — does not modify pods - แนะนำอย่างเดียวไม่แก้ไขค่าของ application pod |
 | `Initial` | VPA assigns resources at pod creation only — no updates to running pods - ใส่ค่าตั้งต้นให้เท่านั้น |
 | `Recreate` | VPA evicts and recreates pods when recommendations change significantly - rolling pod เพื่ออัพเดทค่าที่ VPA แนะนำ|
-| `InPlaceOrRecreate` | In this mode, the VPA automatically applies the recommended CPU and memory resources throughout the pod lifetime. When any pod in the project is out of alignment with the VPA recommendations, the VPA attempts to apply updates in-place, without restarting the pod. If the VPA is not able to update the containers in-place, the VPA deletes the pod - rolling pod เพื่ออัพเดทค่าที่ VPA แนะนำ|
-
-> **Tip:** Start with `Off` to observe recommendations before enabling `Auto` in production.
-
----
-
-### VPA Resource
-
-This module creates a VPA targeting the `timechecker-deployment` in namespace `02-module`:
-
-```yaml
-apiVersion: autoscaling.k8s.io/v1
-kind: VerticalPodAutoscaler
-metadata:
-  name: vpa-02-module
-  namespace: 02-module
-spec:
-  targetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: timechecker-deployment
-  updatePolicy:
-    updateMode: "Off"
-  resourcePolicy:
-    containerPolicies:
-    - containerName: '*'
-      controlledResources:
-      - cpu
-      - memory
-      minAllowed:
-        cpu: 10m
-        memory: 25Mi
-      maxAllowed:
-        cpu: 1
-        memory: 500Mi
-```
+| `InPlaceOrRecreate` | VPA attempts to apply updates in-place without restarting the pod. If unable to update in-place, VPA deletes and recreates the pod - พยายามปรับค่า resource โดยไม่ต้อง restart pod ก่อน ถ้าทำไม่ได้จะ rolling pod |
 
 ---
 
@@ -76,25 +41,43 @@ spec:
 |---|---|
 | `containerName` | Container name or `'*'` for all containers |
 | `controlledResources` | Which resources VPA manages: `cpu`, `memory`, or both |
+| `controlledValues` | `RequestsOnly` (Burstable) or `RequestsAndLimits` (Guaranteed) |
 | `minAllowed` | Minimum resource values VPA will recommend |
 | `maxAllowed` | Maximum resource values VPA will recommend |
 | `mode` | `Auto` (default) or `Off` to exclude a specific container |
+
+#### `controlledValues` Summary
+
+| Value | QoS Class | Description |
+|---|---|---|
+| `RequestsOnly` | Burstable | VPA ปรับเฉพาะ requests — limits คงเดิม |
+| `RequestsAndLimits` | Guaranteed | VPA ปรับทั้ง requests และ limits ให้เท่ากัน — รักษา QoS Guaranteed |
 
 ---
 
 ### Deploy
 
+#### Burstable QoS (`controlledValues: RequestsOnly`)
+
 ```bash
-oc apply -f modules/10-VPA/manifests/02-module-deployment-vpa.yaml
+oc apply -f modules/10-VPA/manifests/sample-application.yaml
+oc apply -f modules/10-VPA/manifests/10-module-deployment-vpa.yaml
+```
+
+#### Guaranteed QoS (`controlledValues: RequestsAndLimits`)
+
+```bash
+oc apply -f modules/10-VPA/manifests/sample-application-guaranteed.yaml
+oc apply -f modules/10-VPA/manifests/10-module-deployment-vpa-guaranteed.yaml
 ```
 
 ### Check Recommendations
 
 ```bash
-oc get vpa timecheck-deployment-vpa -n 02-module -o yaml
+oc get vpa -n 10-module
+oc get vpa vpa-10-module -n 10-module -o yaml
 ```
 ![Recommend pod](../../img/module-10/get-vpa.png)
-
 
 VPA recommendations appear under `status.recommendation.containerRecommendations`:
 
@@ -106,12 +89,8 @@ VPA recommendations appear under `status.recommendation.containerRecommendations
 | `uncappedTarget` | Recommendation without `minAllowed`/`maxAllowed` constraints |
 
 ```bash
-oc get vpa -n 02-module
-oc describe vpa vpa-02-module -n 02-module
+oc describe vpa vpa-10-module -n 10-module
 ```
-
-เช็ก deployment ใน 02-placement จะสังเกตุว่าไม่มี resource กำหนดใน deployment
-แต่
 
 ---
 
@@ -155,58 +134,9 @@ containers:
 | `RestartContainer` | Container restarts to apply | Container restarts to apply |
 | Not specified | Defaults to `NotRequired` for CPU, `NotRequired` for memory |
 
-#### Deploy Sample Application with In-Place Resize
-
-```bash
-oc apply -f modules/10-VPA/manifests/sample-application.yaml
-```
-
-#### Deploy VPA with `InPlaceOrRecreate`
-
-```bash
-oc apply -f modules/10-VPA/manifests/10-module-deployment-vpa.yaml
-```
-
-The VPA in `10-module` uses `InPlaceOrRecreate` mode with `controlledValues: RequestsOnly` (Burstable QoS):
-
-```yaml
-apiVersion: autoscaling.k8s.io/v1
-kind: VerticalPodAutoscaler
-metadata:
-  name: vpa-10-module
-  namespace: 10-module
-spec:
-  targetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: timecheck-deployment
-  updatePolicy:
-    updateMode: InPlaceOrRecreate
-  resourcePolicy:
-    containerPolicies:
-    - containerName: '*'
-      controlledValues: RequestsOnly
-      controlledResources:
-      - cpu
-      - memory
-      minAllowed:
-        cpu: 10m
-        memory: 25Mi
-      maxAllowed:
-        cpu: 1
-        memory: 500Mi
-```
-
 #### Verify In-Place Resize
 
 ตรวจสอบว่า pod ได้รับ resource ใหม่โดยไม่ถูก restart:
-
-```bash
-oc get pod -n 10-module -o yaml | grep -A 10 resizePolicy
-oc get pod -n 10-module -o jsonpath='{.items[*].status.resize}'
-```
-
-ถ้า `status.resize` แสดง `InProgress` หรือว่างเปล่า แสดงว่า in-place resize สำเร็จ — pod ไม่ถูก restart
 
 > **⚠️ QoS Class Constraint:** In-place resize จะทำได้เฉพาะเมื่อ resource ใหม่ที่ VPA แนะนำ **ไม่ทำให้ QoS class เปลี่ยน** เท่านั้น เช่น ถ้า pod เดิมเป็น `Burstable` แล้ว resource ใหม่ทำให้กลายเป็น `Guaranteed` (requests = limits) จะไม่สามารถ resize in-place ได้ — VPA จะ fallback ไปใช้การ recreate pod แทน ดังนั้นการใช้ `controlledValues: RequestsOnly` ทำให้ QoS class ให้คงเดิม (Burstable)
 

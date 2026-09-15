@@ -20,6 +20,6 @@ spec:
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: timechecker-deployment
+    name: timecheck-deployment
   updatePolicy:
-    updateMode: Auto
+    updateMode: InPlaceOrRecreate

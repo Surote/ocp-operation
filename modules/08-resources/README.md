@@ -52,7 +52,6 @@ Additional parameters you can set:
 | `services.nodeports` | Maximum number of NodePort services |
 | `secrets` | Maximum number of secrets |
 | `configmaps` | Maximum number of configmaps |
-| `replicationcontrollers` | Maximum number of replication controllers |
 | `requests.storage` | Maximum total storage requested across all PVCs |
 
 Check current usage against the quota:
@@ -66,6 +65,8 @@ oc describe quota example-quota -n 08-module
 ```bash
 oc get resourcequota -n 08-module
 ```
+
+![Get quota](../../img/module-08/get-quota.png)
 
 ---
 
@@ -128,9 +129,6 @@ oc describe limitrange example-limits -n 08-module
 
 ![Describe limitrange](../../img/module-08/describe-limitrange.png)
 
-```bash
-oc get limitrange -n 08-module
-```
 
 ---
 
@@ -146,6 +144,18 @@ oc apply -f manifests/00-sample-application-08.yaml
 หลังจาก deploy application resource request และ limit จะถูก assign ให้อัตโนมัติจาก limitrange ที่ตั้งค่าไว้
 
 ![Deploy sample application](../../img/module-08/auto-resource-assigned.png)
+
+---
+
+## Deploy sample application
+
+
+deploy application ที่ใส่ resource request และ limit เกินที่กำหนดใน quota
+![Deploy sample application quota](../../img/module-08/deploy-sample-application-quota.png)
+
+
+ Replicaset จะแสดง event ว่าไม่สามารถสร้าง pod ได้เนื่องจาก quota จำกัด
+![Deploy sample application quota](../../img/module-08/out-of-quota.png)
 
 ---
 

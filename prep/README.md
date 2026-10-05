@@ -71,3 +71,12 @@ route:
       matchers:
         - team = platform-infra
 ```
+
+# for prometheus - external label
+
+`cluster-monitoring-config` in `openshift-monitoring
+```
+    prometheusK8s:
+      externalLabels:
+        cluster_name: <NAME>
+```

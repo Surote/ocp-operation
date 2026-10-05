@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-03T12:49:58.303921+00:00",
+  "repo": "/Users/swongpai/Workspaces/ocp-operation",
+  "has_pyyaml": true,
+  "checks": {
+    "yaml": 0,
+    "links": 0,
+    "lab_structure": 0,
+    "module_readmes": 0
+  },
+  "total_failures": 0,
+  "passed": true,
+  "errors": []
+}

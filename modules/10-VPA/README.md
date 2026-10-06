@@ -112,7 +112,7 @@ When VPA is set to `updateMode: InPlaceOrRecreate`, it attempts to resize contai
 
 
 ![Recommend pod](../../img/module-10/inplace-vpa-not-restart.png)
-
+![inplace vpa pod](../../img/module-10/inplace-vpa-event.png)
 ---
 
 ### VPA vs HPA

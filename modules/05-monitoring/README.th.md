@@ -73,7 +73,7 @@ prometheusK8s:
 
 ### Expanding Prometheus PVC
 
-If the storage class supports volume expansion (CSI), resize by patching the PVC directly:
+ถ้า Storage Class รองรับการเพิ่มขนาดของ pvc เราสามารถใช้ command เพื่อปรับขนาดของ pvc สำหรับพื้นที่ของ Prometheus ได้
 
 ```bash
 oc patch pvc prometheus-data-prometheus-k8s-0 -n openshift-monitoring --type merge -p '
@@ -84,14 +84,14 @@ spec:
 '
 ```
 ![Prometheus PVC expand](../../img/module-05/prometheus-pvc-expand.png)
-Verify:
+ตรวจสอบ:
 
 ```bash
 oc get pvc,pod -n openshift-monitoring
 ```
 
 
-After applying the monitoring ConfigMap, all monitoring pods and PVCs should be running on infra nodes with the configured storage:
+หลังจาก apply configmap pod ต่างๆของ monitoring จะต้องอยู่ที่ node ที่เราตั้งค่าไว้และขนาดของ storage ที่ขอ:
 
 ![Monitoring PVCs, pods, and Prometheus storage](../../img/module-05/monitoring-pvc-pods-storage.png)
 
@@ -99,7 +99,7 @@ After applying the monitoring ConfigMap, all monitoring pods and PVCs should be 
 
 ### Alert Relabeling
 
-`AlertRelabelConfig` lets you add, modify, or drop labels on platform alerts before they reach Alertmanager. This is useful for routing alerts to specific teams or receivers.
+`AlertRelabelConfig` ให้เราสามารถ เพิ่ม ลด label ของ alert ที่ติดมากับ OpenShift ได้ เพื่อสะดวกในการเลือกส่ง alert ให้กับทีมต่างๆ
 
 Apply the relabel config:
 
@@ -108,7 +108,7 @@ oc apply -f manifests/platform-alert-relabel-01.yaml
 oc apply -f manifests/platform-alert-relabel-non-compliance.yaml
 ```
 
-This example adds a `team: platform-infra` label to the `KubeNodeNotReady` alert:
+ตัวอย่าคือเพิ่ม label `team: platform-infra` ให้กับ alert ชื่อ `KubeNodeNotReady`:
 
 ```yaml
 apiVersion: monitoring.openshift.io/v1
@@ -133,7 +133,7 @@ spec:
 | `replacement` | The value to set on the target label |
 | `action` | `Replace`, `Keep`, `Drop`, `HashMod`, `LabelMap`, `LabelDrop`, `LabelKeep` |
 
-Once applied, the `KubeNodeNotReady` alert will carry the `team = platform-infra` label, which can be used in Alertmanager to route notifications to the correct receiver.
+หลังจาก config `KubeNodeNotReady` alert จะมี label `team = platform-infra` ซึ่งเราสามารถใช้ใน Alertmanager เพื่อทำการส่งต่อไปให้ยังผู้รับที่ต้องการผ่านการตั้งค่า route, receiver ได้.
 
 > **Note:** `AlertRelabelConfig` only modifies labels on the Alertmanager side. The relabeled labels will appear in Alertmanager and in notifications (e.g. email, webhook), but they will **not** be visible in the OpenShift web console Observe > Alerting UI, which reads alerts directly from Prometheus before relabeling is applied.
 

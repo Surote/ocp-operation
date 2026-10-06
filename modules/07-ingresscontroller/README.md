@@ -54,6 +54,12 @@ spec:
 
 This ensures routes with `type: sharded` are only served by the sharded IngressController.
 
+By default without `routeSelector`
+![route selector default pod](../../img/module-07/route-selector-default.jpg)
+
+with `routeSelector` exclude `type NotIn sharded`
+![route selector exclude pod](../../img/module-07/route-selector-exclude.jpg)
+
 ---
 
 ## Deploy the Sample Application

@@ -2,13 +2,13 @@
 
 ![Logging overview operators](../../img/module-06/logging-overview.jpg)
 
-This module sets up OpenShift logging with LokiStack as the log store, using ODF MCG (NooBaa) for S3 object storage.
+การสร้างระบบ Logging บน OpenShift โดยใช้ Loki Stack และใช้ Object Storage จาก ODF MCG
 
 ---
 
 ### Operators
 
-Three operators are required:
+3 Operators ที่ใช้ในการติดตั้งระบบ Loggin :
 
 | Operator | Namespace | Channel |
 |---|---|---|
@@ -16,7 +16,7 @@ Three operators are required:
 | Cluster Logging | `openshift-logging` | `stable-6.6` |
 | Loki Operator | `openshift-operators-redhat` | `stable-6.6` |
 
-All subscriptions use `installPlanApproval: Manual`.
+ในการติดตั้ง Operator เราจะตั้งค่าการอัพเดทเป็น Manual เพื่อให้เราสามารถควบคุมเวอร์ชันของ Operator ได้ `installPlanApproval: Manual`.
 
 ---
 
@@ -30,7 +30,7 @@ oc apply -f manifests/loki/
 ![Applied operators](../../img/module-06/apply-operator.png)
 
 
-Approve the install plans manually:
+Approve เพื่อยืนยันการติดตั้ง:
 
 ```bash
 oc get installplan -n openshift-observability
@@ -39,6 +39,7 @@ oc get installplan -n openshift-operators-redhat
 
 oc patch installplan <plan-name> -n <namespace> --type merge -p '{"spec":{"approved":true}}'
 ```
+หรือใช้จากหน้า UI
 
 ![Approve operators](../../img/module-06/operators-pendings.png)
 
@@ -51,7 +52,7 @@ oc patch installplan <plan-name> -n <namespace> --type merge -p '{"spec":{"appro
 oc apply -f manifests/loki-config/00-obc.yaml
 ```
 
-This creates an `ObjectBucketClaim` named `loki` in `openshift-logging` backed by the NooBaa storage class.
+สร้าง Object Storage bucket ผ่าน ODF Multi Cloud Gateway. คล้ายๆกับการสร้าง bucket บน AWS S3 เพื่อใช้ในการเก็บข้อมูลของ Loki โดยจะสร้างที่ project `openshift-logging` ชื่อ `loki`
 
 ![Create bucket](../../img/module-06/apply-obc.png)
 
@@ -63,7 +64,7 @@ This creates an `ObjectBucketClaim` named `loki` in `openshift-logging` backed b
 oc apply -f manifests/loki-config/01-sa-clusterrolebinding.yaml
 ```
 
-Creates a `collector` service account with the following cluster roles:
+สร้าง Service Account เพื่อใช้สำหรับ collector ให้มีสิทธิ์ในการดึงข้อมูลจากแหล่งต่างๆที่จำเป็นก่อนส่งไปเก็บยัง Logging หรือ forward ต่อไป
 
 - `logging-collector-logs-writer`
 - `collect-application-logs`
@@ -75,13 +76,13 @@ Creates a `collector` service account with the following cluster roles:
 
 ### Step 4 — Create Loki Secret from Bucket Credentials
 
+สร้าง Secret ที่ใช้ในการเข้าถึง Object Storage ที่เราสร้างจาก ODF MCG โดย script จะทำการสร้าง secret ให้ใน projetc `openshift-logging`
+
 ```bash
 cd manifests/loki-config
 chmod +x 02-get_secret.sh
 ./02-get_secret.sh
 ```
-
-The script extracts the access key, secret key, bucket name, and endpoint from the OBC and creates a secret named `loki-sec` in `openshift-logging`.
 
 ![Create and copy secret object to logging](../../img/module-06/copy-secret-bucket-to-logging.png)
 
@@ -110,7 +111,8 @@ Key configuration:
 oc apply -f manifests/loki-config/04-logging.yaml
 ```
 
-Forwards `application`, `infrastructure`, and `audit` logs to the LokiStack. The collector tolerates all taints and uses the `collector` service account created in Step 3.
+เราจะส่งข้อมูลไปเก็บยัง Loki ทั้งหมด 3 indexs คือ `application`, `infrastructure`, `audit` เพื่อใช้ในการทดสอบ
+
 
 ![get pod for collector](../../img/module-06/collector.png)
 
@@ -118,11 +120,11 @@ Forwards `application`, `infrastructure`, and `audit` logs to the LokiStack. The
 
 ### Step 7 — Enable Logging UI Plugin
 
+เปิดการใช้งาน Logging Console เพื่อให้มีหน้าในการดู log ผ่าน OpenShift Console ได้
+
 ```bash
 oc apply -f manifests/loki-config/05-ui-plugin.yaml
 ```
-
-Adds the Logging UI plugin to the OpenShift console, connected to the `lokistack` instance.
 
 ![logging dashboard](../../img/module-06/log-dashboard.png)
 
@@ -132,7 +134,7 @@ Adds the Logging UI plugin to the OpenShift console, connected to the `lokistack
 
 ### Updating Collector Resources
 
-To adjust the collector's CPU/memory requests and limits, patch the `ClusterLogForwarder` directly:
+ปรับค่า `collector` cpu request หรือ memory ได้. เนื่องจากโดยค่าตั้งต้น collector จะขอ cpu request ที่ `500m` 
 
 ```bash
 oc patch clusterlogforwarder collector -n openshift-logging --type merge -p '
@@ -148,7 +150,7 @@ spec:
 '
 ```
 
-Or edit interactively:
+หรือใช้คำสั่ง edit:
 
 ```bash
 oc edit clusterlogforwarder collector -n openshift-logging
@@ -170,7 +172,7 @@ spec:
 
 ### Enable LogFileMetricExporter
 
-A Prometheus exporter that monitors pod log files and exports metrics about the volume of data being logged.
+เปิด metric สำหรับดูค่าว่า pod ไหนสร้าง log มากที่สุด
 
 ```yaml
 apiVersion: logging.openshift.io/v1alpha1

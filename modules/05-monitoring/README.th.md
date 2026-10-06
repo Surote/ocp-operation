@@ -1,6 +1,6 @@
 # Monitoring
 
-This module covers the OpenShift monitoring stack configuration — moving components to infra nodes, setting retention/storage, and using AlertRelabelConfig to enrich alerts.
+การตั้งค่า OpenShift Monitoring เช่น ย้าย pod ต่างๆใน project openshift-monitoring ไปยังเครื่อง infra, การปรับค่าระยะเวลาในการเก็บข้อมูล / ขนาดของ storage, การสร้าง label สำหรับ alert 
 
 ---
 
@@ -8,13 +8,13 @@ This module covers the OpenShift monitoring stack configuration — moving compo
 
 ### Monitoring Stack Configuration
 
-Apply the cluster monitoring ConfigMap to configure all monitoring components:
+
 
 ```bash
 oc apply -f manifests/cm-openshift-monitoring.yaml
 ```
 
-This ConfigMap (`cluster-monitoring-config` in `openshift-monitoring`) configures the following:
+Configmap จะถูก monitoring operator ดึงไปเพื่อทำการอัพเดท monitoring stack ให้เป็นไปตามที่กำหนด (`cluster-monitoring-config` ใน project `openshift-monitoring`):
 
 | Component | Node Selector | Storage | Other |
 |---|---|---|---|
@@ -28,7 +28,7 @@ This ConfigMap (`cluster-monitoring-config` in `openshift-monitoring`) configure
 | `openshiftStateMetrics` | `infra-observe` | — | — |
 | `thanosQuerier` | `infra-observe` | — | — |
 
-All components are pinned to infra nodes with a matching toleration for `node-role.kubernetes.io/infra`.
+ทุก pod จะถูกกำหนดให้ tolerate กับค่า taint ที่กำหนดไว้บนเครื่อง infra  `node-role.kubernetes.io/infra`.
 
 ---
 
@@ -39,13 +39,19 @@ oc get pod -n openshift-monitoring -o wide
 ```
 ![Existing prometheus](../../img/module-05/existing-prom.png)
 
+pods ต่างๆของ monitoring จะรันอยู่ที่ worker nodes ทั้งหมด ยกเว้น `daemonset` เนื่องจาก `infra` node เราได้ทำการ `tainted` ไว้ 
+
 
 ## Move Monitoring components to infra nodes
+
+ทำการย้าย pods ต่างๆของ monitoring ไปไว้ที่ `infra` node เพื่อประหยัดพื้นที่ของ worker เพื่อใช้งานได้เต็มที่สำหรับ application workload
 
 ```bash
 oc apply -f manifests/cm-openshift-monitoring.yaml
 ```
 
+pods ต่างๆจะเริ่มย้ายไปรันที่ `infra` node และมี PVC เพื่อใช้ในการเก็บข้อมูล metrics ของ prometheus และ alertmanager ที่ใช้ในการเก็บข้อมูลสำหรับการแจ้งเตือน
+สังเกตุว่า pods ต่างๆจะไปรันอยู่ที่ `infra` node ที่ 5-6 เนื่องจาก config มีการเลือก node label ให้ใช้ `infra-observe`
 ![Moving to infra node](../../img/module-05/move-monitoring-to-infra.png)
 
 
@@ -133,14 +139,16 @@ Once applied, the `KubeNodeNotReady` alert will carry the `team = platform-infra
 
 ![Alert relabel email result](../../img/module-05/alert-relabel-email.png)
 
-![Alert relabel slack result](../../img/module-05/warning-slack.png)
+หรือส่งผ่าน slack
+![Alert relabel email result](../../img/module-05/warning-slack.png)
 
 ---
 
 ## Custom Alert
 
-Create custom alerts using `AlertingRule` (platform alerts in `openshift-monitoring`) or `PrometheusRule` (user-workload alerts in application namespaces).
+เราสามารถสร้าง custom alert ตาม promql ที่เราสนใจได้เองโดยใช้ kind alertingrule ถ้่าเป็น platform alert และต้องอยู่ใน namespace openshift-monitoring สำหรับ user-workload-monitoring สามารถทำได้ใน namespace ของ application แต่จะใช้ kind prometheusrule
 
+ตัวอย่าง custom alert ที่จะส่ง alert เมื่อเครื่องมีการใช้งาน memory เกินค่าที่กำหนด
 ```bash
 oc apply -f manifests/platform-alert-node-usage-high-mem.yaml
 ```
@@ -149,26 +157,26 @@ oc apply -f manifests/platform-alert-node-usage-high-mem.yaml
 
 ---
 
-## Custom dashboard with Perses
+## Custom dashboard with Perse 
 
-Cluster Observability Operator 1.5+ GA enables custom dashboards and panels using PromQL.
+Cluster Observe Operator 1.5+ GA ทำให้เราสามารถปรับแต่ง dashboard และ panel เองได้ ตาม promQL ที่เราต้องการจาก metric ที่เรามีใน cluster ได้
 
-> **Prerequisite:** complete module 06-logging first.
+- ทำหลังจาก 06-logging
 
-Create the UIPlugin to enable custom dashboards:
-
+สร้าง UIplugin เพื่อเปิดใช้งาน custom dashboard
 ```bash 
 oc apply -f manifests/perses-monitoring-custom-dashboard.yaml
 ```
 >**re-authentication required**
 
-Import an example dashboard:
+ตัวอย่าง dashboard ที่สร้างแล้ว สามารถ import เข้าไปได้คล้ายๆ grafana json
+
 
 ```bash 
 oc apply -f manifests/perses-example-dashboard.yaml
 ```
 
-> Navigate to project `openshift-observability`, then Observe > Dashboards (Perses) and select the `example lab-dashboard`.
+>เลือก project: openshift-observability แล้วไปที่ Observe>Dashboards (Perses) เลือก Dashboard ที่ชื่อ example lab-dashboard
 
 ![Example Perses](../../img/module-05/perses-example-01.png)
 
